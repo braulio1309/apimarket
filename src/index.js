@@ -1,14 +1,15 @@
 
 //Requires
-var express = require('express');
-var bodyParser = require('body-parser');
-var pool = require('../database');
+const express = require('express');
+const bodyParser = require('body-parser');
+const pool = require('../database');
+const config = require('./database/config');
 
 //Ejecutar express
-var app = express();
+const app = express();
 
 //Cargar archivos de rutas
-var usuario_routes = require('./routes/usuario');
+const usuario_routes = require('./routes/usuario');
 
 //Middlewares
 app.use(express.urlencoded({extended:false}));
@@ -20,9 +21,9 @@ app.use(bodeyParser.json());
 app.use('/api', usuario_routes);
 
 //Corriendo servidor
-app.listen(app.get('port', () => {
-    console.log('Servidor corriendo exitosamente 222');
-}))
+app.listen(config.PORT, () => {
+    console.log('Servidor corriendo exitosamente'+ config.PORT);
+})
 
 //Exportar modulo
 module.exports = app;

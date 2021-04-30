@@ -1,6 +1,6 @@
-var jwt = require('jwt-simple');
-var moment = require('moment')
-var secret = "clave-secreta-1309";
+const jwt = require('jwt-simple');
+const moment = require('moment')
+const secret = "clave-secreta-1309";
 
 exports.authenticated = function(req, res, next){
     
@@ -11,9 +11,9 @@ exports.authenticated = function(req, res, next){
         });
     }
     //Decodificar el token
-    var payload;
+    let payload;
     try{
-        console.log('d')
+    
 
         payload = jwt.decode(req.headers.authorization, secret);
         //Comprobar si el token expiró
