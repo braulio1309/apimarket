@@ -12,6 +12,7 @@ const app = express();
 //Cargar archivos de rutas
 const usuario_routes = require('./routes/usuario');
 const roles_routes = require('./routes/roles');
+const metaUsuarios_routes = require('./routes/metausuarios');
 
 //Middlewares
 app.use(express.urlencoded({extended:false}));
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 //Reescribir rutas
 app.use('/api', usuario_routes);
 app.use('/api', roles_routes);
+app.use('/api', metaUsuarios_routes);
 
 //Corriendo servidor
 app.listen(config.PORT, () => {
