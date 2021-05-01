@@ -10,7 +10,7 @@ const pool=mysql.createPool({
   host: 'localhost',
   user:'root',
   password: '',
-  database: 'apimarket'
+  database: 'cheeseok_marketplace_test'
 })
 
 const promisePool = pool.promise();

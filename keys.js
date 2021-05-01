@@ -3,6 +3,6 @@ module.exports = {
         host: 'localhost',
         user:'root',
         password: '',
-        database: 'apimarket'
+        database: 'cheeseok_marketplace_test'
     }
 }

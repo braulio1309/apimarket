@@ -1,3 +1,4 @@
+//Librerías y servicios
 const validator = require('validator');
 let Usuario = require('../Models/Usuarios');
 const bcrypt = require('bcryptjs');
@@ -5,6 +6,8 @@ const jwt = require('../services/jwt');
 const moment = require('moment');
 const pool = require('../../database')
 const consulta = require('../database/mysql')
+const date = new Date();
+
 
 let usuario = {
 
@@ -54,11 +57,12 @@ let usuario = {
                        DES_NOMBRE: user.nombre,
                        DES_USUARIO: user.usuario,
                        DES_PASS:user.password,
-                        DES_CORREO:user.email,
-                        DES_APELLIDO:user.apellido
+                       DES_CORREO:user.email,
+                       DES_APELLIDO:user.apellido,
+                       FECHA: date,
+                       ESTATUS: 1
                     }
                     
-                    //const save = await pool.query(consulta.insert('USUARIOS', data));
                     if(consulta.funciones.insertTable('USUARIOS', data)){
                         return res.status(200).send({
                             'message': 'Usuario registrado exitosamente',
@@ -151,20 +155,16 @@ let usuario = {
         params.email    = (params.email == undefined)?'':params.email;
         params.password = (params.password == undefined)?'':params.password;
         params.usuario  = (params.usuario == undefined)?'':params.usuario;
-        try{
-            let validate_nombre     = !validator.isEmpty(params.nombre);
-            let validate_apellido   = !validator.isEmpty(params.apellido);
-            let validate_email      = !validator.isEmpty(params.email) && validator.isEmail(params.email);
-            let validate_pass       = !validator.isEmpty(params.password);
-            let validate_user       = !validator.isEmpty(params.usuario);
-        }catch(ex){
-            return res.status(400).send({
-                'message': 'Datos incorrectos, intentelo de nuevo'
-            });
-        }
+        
+        let validate_nombre     = !validator.isEmpty(params.nombre);
+        let validate_apellido   = !validator.isEmpty(params.apellido);
+        let validate_email      = !validator.isEmpty(params.email) && validator.isEmail(params.email);
+        let validate_pass       = !validator.isEmpty(params.password);
+        let validate_user       = !validator.isEmpty(params.usuario);
+       
        
 
-        if(req.user.sub == id){ //Valido que solo el usuario pueda modificar su propio usuario
+        if((validate_nombre || validate_apellido || validate_email|| validate_pass || validate_user) && req.user.sub == id){ //Valido que solo el usuario pueda modificar su propio usuario
             let user =  Usuario;
 
             //Valido duplicidad
@@ -217,11 +217,11 @@ let usuario = {
                     }
                 }else{
                     bcrypt.hash(params.password, 4, function(err, hash) {
-                        data.password = hash;
+                        data.DES_PASS = hash;
                         if(consulta.funciones.update('usuarios', data)){
                             return res.status(200).send({
                                 'message': 'Usuario actualizado exitosamente',
-                                'user': user
+                                'user': data
                             }); 
                         }else{
                             return res.status(400).send({
