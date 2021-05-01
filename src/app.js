@@ -10,20 +10,23 @@ const config = require('./database/config');
 const app = express();
 
 //Cargar archivos de rutas
-const usuario_routes = require('./routes/usuario');
-const roles_routes = require('./routes/roles');
-const metaUsuarios_routes = require('./routes/metausuarios');
+const usuario_routes        = require('./routes/usuario');
+const roles_routes          = require('./routes/roles');
+const metaUsuarios_routes   = require('./routes/metausuarios');
+const metaRoles_routes      = require('./routes/metaroles');
+const Usuarios_roles_routes      = require('./routes/usuario_roles');
 
 //Middlewares
 app.use(express.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-//CORS
 
 //Reescribir rutas
 app.use('/api', usuario_routes);
 app.use('/api', roles_routes);
 app.use('/api', metaUsuarios_routes);
+app.use('/api', metaRoles_routes);
+app.use('/api', Usuarios_roles_routes);
 
 //Corriendo servidor
 app.listen(config.PORT, () => {
