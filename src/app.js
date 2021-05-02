@@ -15,6 +15,7 @@ const roles_routes          = require('./routes/roles');
 const metaUsuarios_routes   = require('./routes/metausuarios');
 const metaRoles_routes      = require('./routes/metaroles');
 const Usuarios_roles_routes      = require('./routes/usuario_roles');
+const tiendas_routes      = require('./routes/tiendas');
 
 //Middlewares
 app.use(express.urlencoded({extended:false}));
@@ -27,6 +28,7 @@ app.use('/api', roles_routes);
 app.use('/api', metaUsuarios_routes);
 app.use('/api', metaRoles_routes);
 app.use('/api', Usuarios_roles_routes);
+app.use('/api', tiendas_routes);
 
 //Corriendo servidor
 app.listen(config.PORT, () => {
