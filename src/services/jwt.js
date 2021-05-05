@@ -14,5 +14,5 @@ exports.createToken = function(user){
 
     };
 
-    return jwt.encode(payload, 'clave-secreta-1309');
+    return jwt.encode(payload, process.env.TOKEN);
 }
