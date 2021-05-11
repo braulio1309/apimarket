@@ -1,11 +1,11 @@
-const MetaProducto = {
-    TABLA:  'meta_productos',
+const MetaRoles = {
+    TABLA:  'meta_pedidos',
     ID:     'ID',
-    ID_PRODUCTO: 'ID_PRODUCTO',
+    ID_ROL: 'ID_PEDIDO',
     KEY:    'DES_META_KEY',
     VALUE:  'DES_META_VALUE',
     FECHA:  'FECHA',
     ESTATUS:'ESTATUS'
 }
 
-module.exports = MetaProducto;
+module.exports = MetaRoles;
