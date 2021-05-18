@@ -1,6 +1,6 @@
 //Librerías y servicios
 const validator = require('validator');
-const USUARIOS_ROLES = require('../Models/Usuarios_roles');
+const USUARIOS_ROLES = require('../Models/Usuarios_ID_ROLes');
 const USUARIOS = require('../Models/User');
 const ROLES = require('../Models/Roles');
 const moment = require('moment');
@@ -8,47 +8,47 @@ const pool = require('../../database')
 const consulta = require('../database/mysql')
 const date = new Date();
 
-const usuarios_roles = {
+const ID_USUARIOs_ID_ROLes = {
     crear:async function(req, res) {
 
         let params = req.body;
 
          //Validar datos
-         params.usuario   = (params.usuario == undefined)?'':params.usuario;
-         params.rol   = (params.rol == undefined)?'':params.rol;
+         params.ID_USUARIO   = (params.ID_USUARIO == undefined)?'':params.ID_USUARIO;
+         params.ID_ROL   = (params.ID_ROL == undefined)?'':params.ID_ROL;
  
-         let validate_usuario   = !validator.isEmpty(params.usuario);
-         let validate_rol  = !validator.isEmpty(params.rol);
+         let validate_ID_USUARIO   = !validator.isEmpty(params.ID_USUARIO);
+         let validate_ID_ROL  = !validator.isEmpty(params.ID_ROL);
 
-         if(validate_usuario && validate_rol){
+         if(validate_ID_USUARIO && validate_ID_ROL){
 
-            //validamos que exista el usuario
-            const user = await pool.query(consulta.get(USUARIOS.TABLA, params.usuario));
+            //validamos que exista el ID_USUARIO
+            const user = await pool.query(consulta.get(USUARIOS.TABLA, params.ID_USUARIO));
             if(user.length == 0){
                 return res.status(400).send({
                     'message': 'Usuario inexistente'
                 });
             }
 
-            //Validamos que exista el rol
-            const rol = await pool.query(consulta.get(ROLES.TABLA, params.rol));
-            if(rol.length == 0){
+            //Validamos que exista el ID_ROL
+            const ID_ROL = await pool.query(consulta.get(ROLES.TABLA, params.ID_ROL));
+            if(ID_ROL.length == 0){
                 return res.status(400).send({
                     'message': 'Rol inexistente'
                 });
             }
             
             //validamos que no se repita el registro
-            const user_rol = await pool.query(consulta.custom(`SELECT * FROM ${USUARIOS_ROLES.TABLA} 
-            WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${params.usuario}
-            AND ${USUARIOS_ROLES.ID_ROL} = ${params.rol}`))
+            const user_ID_ROL = await pool.query(consulta.custom(`SELECT * FROM ${USUARIOS_ROLES.TABLA} 
+            WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${params.ID_USUARIO}
+            AND ${USUARIOS_ROLES.ID_ROL} = ${params.ID_ROL}`))
 
-            if(user_rol.length == 0){
+            if(user_ID_ROL.length == 0){
 
                 //Guardamos en la base de datos
                 const data = {
-                    ID_USUARIO: params.usuario,
-                    ID_ROL: params.rol,
+                    ID_USUARIO: params.ID_USUARIO,
+                    ID_ROL: params.ID_ROL,
                     ID_USUARIO_ALTA: req.user.sub,
                     FECHA: date,
                     ESTATUS: 1
@@ -56,7 +56,7 @@ const usuarios_roles = {
 
                 const save = consulta.funciones.insertTable(USUARIOS_ROLES.TABLA, data)
                 return res.status(200).send({
-                    'message': 'Usuario y rol registrados exitosamente',
+                    'message': 'Usuario y ID_ROL registrados exitosamente',
                     'data': data
                 }); 
             }else{
@@ -82,69 +82,69 @@ const usuarios_roles = {
         let params = req.body;
 
          //Validar datos
-         const id_usuario = req.params.id_usuario
-         const id_rol = req.params.id_rol
+         const ID_USUARIO = req.params.ID_USUARIO
+         const ID_ROL = req.params.ID_ROL
 
-         params.usuario   = (params.usuario == undefined)?'':params.usuario;
-         params.rol   = (params.rol == undefined)?'':params.rol;
-         params.estatus   = (params.estatus == undefined)?'':params.estatus;
+         params.ID_USUARIO   = (params.ID_USUARIO == undefined)?'':params.ID_USUARIO;
+         params.ID_ROL   = (params.ID_ROL == undefined)?'':params.ID_ROL;
+         params.ESTATUS   = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
-         let validate_usuario   = !validator.isEmpty(params.usuario);
-         let validate_rol  = !validator.isEmpty(params.rol);
-         let validate_estatus  = !validator.isEmpty(params.estatus);
+         let validate_ID_USUARIO   = !validator.isEmpty(params.ID_USUARIO);
+         let validate_ID_ROL  = !validator.isEmpty(params.ID_ROL);
+         let validate_ESTATUS  = !validator.isEmpty(params.ESTATUS);
 
-         if(validate_usuario && validate_rol && validate_estatus){
+         if(validate_ID_USUARIO && validate_ID_ROL && validate_ESTATUS){
 
             //Validamos que este el registro a actualizar
-            let roles_user = await pool.query(consulta.custom(`SELECT * FROM ${USUARIOS_ROLES.TABLA} 
-            WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${id_usuario}
-            AND ${USUARIOS_ROLES.ID_ROL} = ${id_rol}`))      
+            let ID_ROLes_user = await pool.query(consulta.custom(`SELECT * FROM ${USUARIOS_ROLES.TABLA} 
+            WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${ID_USUARIO}
+            AND ${USUARIOS_ROLES.ID_ROL} = ${ID_ROL}`))      
 
-          if(roles_user.length == 0){
+          if(ID_ROLes_user.length == 0){
                 return res.status(400).send({
                     'message': 'El registro no existe'
                 });
             }
-            //validamos que exista el usuario
-            const user = await pool.query(consulta.get(USUARIOS.TABLA, params.usuario));
+            //validamos que exista el ID_USUARIO
+            const user = await pool.query(consulta.get(USUARIOS.TABLA, params.ID_USUARIO));
             if(user.length == 0){
                 return res.status(400).send({
                     'message': 'Usuario inexistente'
                 });
             }
 
-            //Validamos que exista el rol
-            const rol = await pool.query(consulta.get(ROLES.TABLA, params.rol));
-            if(rol.length == 0){
+            //Validamos que exista el ID_ROL
+            const ID_ROL = await pool.query(consulta.get(ROLES.TABLA, params.ID_ROL));
+            if(ID_ROL.length == 0){
                 return res.status(400).send({
                     'message': 'Rol inexistente'
                 });
             }
             
             //validamos que no se repita el registro
-            const user_rol = await pool.query(consulta.custom(`SELECT * FROM ${USUARIOS_ROLES.TABLA} 
-            WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${params.usuario}
-            AND ${USUARIOS_ROLES.ID_ROL} = ${params.rol} AND ${USUARIOS_ROLES.ESTATUS} = ${params.estatus}`  ))
+            const user_ID_ROL = await pool.query(consulta.custom(`SELECT * FROM ${USUARIOS_ROLES.TABLA} 
+            WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${params.ID_USUARIO}
+            AND ${USUARIOS_ROLES.ID_ROL} = ${params.ID_ROL} AND ${USUARIOS_ROLES.ESTATUS} = ${params.ESTATUS}`  ))
 
-            if(user_rol.length == 0){
+            if(user_ID_ROL.length == 0){
 
                 //Guardamos en la base de datos
-                roles_user = roles_user[0]
+                ID_ROLes_user = ID_ROLes_user[0]
                 const data = {
-                    ID_USUARIO: (params.usuario == '')?roles_user.ID_USUARIO:params.usuario,
-                    ID_ROL:  (params.rol == '')?roles_user.ID_ROL:params.rol,
+                    ID_USUARIO: (params.ID_USUARIO == '')?ID_ROLes_user.ID_USUARIO:params.ID_USUARIO,
+                    ID_ROL:  (params.ID_ROL == '')?ID_ROLes_user.ID_ROL:params.ID_ROL,
                     ID_USUARIO_ALTA: req.user.sub,
-                    FECHA: roles_user.FECHA,
-                    ESTATUS:  (params.estatus == '')?roles_user.ESTATUS:params.estatus
+                    FECHA: ID_ROLes_user.FECHA,
+                    ESTATUS:  (params.ESTATUS == '')?ID_ROLes_user.ESTATUS:params.ESTATUS
                 }
 
                 
                 await pool.query(consulta.custom(`UPDATE ${USUARIOS_ROLES.TABLA} SET ${USUARIOS_ROLES.ID_USUARIO} = ${data.ID_USUARIO}, 
-                    ${USUARIOS_ROLES.ID_ROL} = ${data.ID_ROL}, ${USUARIOS_ROLES.ESTATUS} = ${data.ESTATUS} WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${id_usuario}
-                    AND ${USUARIOS_ROLES.ID_ROL} = ${id_rol} `));
+                    ${USUARIOS_ROLES.ID_ROL} = ${data.ID_ROL}, ${USUARIOS_ROLES.ESTATUS} = ${data.ESTATUS} WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${ID_USUARIO}
+                    AND ${USUARIOS_ROLES.ID_ROL} = ${ID_ROL} `));
 
                 return res.status(200).send({
-                    'message': 'Usuario y rol actualizados exitosamente',
+                    'message': 'Usuario y ID_ROL actualizados exitosamente',
                     'data': data
                 }); 
             }else{
@@ -161,17 +161,17 @@ const usuarios_roles = {
 
     delete: async function (req, res){
 
-        let id_usuario = req.params.id_usuario;
-        let id_rol = req.params.id_rol
-        console.log(consulta.custom(`DELETE FROM ${USUARIOS_ROLES.TABLA} WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${id_usuario}
-        AND ${USUARIOS_ROLES.ID_ROL} = ${id_rol}`))
-        const borrar = await pool.query(consulta.custom(`DELETE FROM ${USUARIOS_ROLES.TABLA} WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${id_usuario}
-        AND ${USUARIOS_ROLES.ID_ROL} = ${id_rol}`));
+        let ID_USUARIO = req.params.ID_USUARIO;
+        let ID_ROL = req.params.ID_ROL
+        console.log(consulta.custom(`DELETE FROM ${USUARIOS_ROLES.TABLA} WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${ID_USUARIO}
+        AND ${USUARIOS_ROLES.ID_ROL} = ${ID_ROL}`))
+        const borrar = await pool.query(consulta.custom(`DELETE FROM ${USUARIOS_ROLES.TABLA} WHERE ${USUARIOS_ROLES.ID_USUARIO} = ${ID_USUARIO}
+        AND ${USUARIOS_ROLES.ID_ROL} = ${ID_ROL}`));
 
         return res.status(200).send({
-            'message': 'Se le eliminó el rol al usuario exitosamente',
+            'message': 'Se le eliminó el ID_ROL al ID_USUARIO exitosamente',
         }); 
     }
 }
 
-module.exports = usuarios_roles;
+module.exports = ID_USUARIOs_ID_ROLes;

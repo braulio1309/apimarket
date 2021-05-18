@@ -14,26 +14,26 @@ let roles = {
        
         let params = req.body;
         //Validar datos
-        params.rol   = (params.rol == undefined)?'':params.rol;
+        params.DES_ROL   = (params.DES_ROL == undefined)?'':params.DES_ROL;
 
-        let validate_rol    = !validator.isEmpty(params.rol);
+        let validate_rol    = !validator.isEmpty(params.DES_ROL);
        
 
         if(validate_rol){
             
             //Verificamos si existe
-            const verifica = await pool.query(consulta.search(Roles.TABLA, Roles.NOMBRE_ROL, params.rol, 'equals'))
+            const verifica = await pool.query(consulta.search(Roles.TABLA, Roles.NOMBRE_ROL, params.DES_ROL, 'equals'))
             
             if(verifica.length > 0){
                 return res.status(400).send({
-                    'message': 'rol ya existe'
+                    'message': 'DES_ROL ya existe'
                 });
             }else{
                 //Guardo en la base de datos
               
                 
                 const data = {
-                    DES_ROL:params.rol,
+                    DES_ROL:params.DES_ROL,
                     FECHA: date,
                     ESTATUS: 1
                 }
@@ -41,7 +41,7 @@ let roles = {
                 if(consulta.funciones.insertTable(Roles.TABLA, data)){
                     return res.status(200).send({
                         'message': 'roles registrado exitosamente',
-                        'rol': data
+                        'DES_ROL': data
                     }); 
                 }else{
                     return res.status(400).send({
@@ -75,31 +75,31 @@ let roles = {
 
         //Validar datos
         let id = req.params.id //ID por parametros
-        params.rol   = (params.rol == undefined)?'':params.rol;
-        params.estatus   = (params.estatus == undefined)?'':params.estatus;
+        params.DES_ROL   = (params.DES_ROL == undefined)?'':params.DES_ROL;
+        params.ESTATUS   = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
        
-        let validate_rol     = !validator.isEmpty(params.rol);
-        let validate_estatus     = !validator.isEmpty(params.estatus);       
+        let validate_rol     = !validator.isEmpty(params.DES_ROL);
+        let validate_estatus     = !validator.isEmpty(params.ESTATUS);       
 
         if(validate_rol || validate_estatus){ //Valido que es admin
            
              //Valido duplicidad
-            if(params.rol != ''){
-                const rol_nombre =  await pool.query(consulta.search(Roles.TABLA, Roles.NOMBRE_ROL, params.rol, 'equals'))
+            if(params.DES_ROL != ''){
+                const rol_nombre =  await pool.query(consulta.search(Roles.TABLA, Roles.NOMBRE_ROL, params.DES_ROL, 'equals'))
                 if(rol_nombre.length != 0){
                     return res.status(400).send({
-                        'message': 'El rol ya fue creado'
+                        'message': 'El DES_ROL ya fue creado'
                     });
                 }
             }
 
-            //Busco el rol a actualizar y verifico si existe
+            //Busco el DES_ROL a actualizar y verifico si existe
             let roles =  await pool.query(consulta.get(Roles.TABLA, id));
 
             if(roles.length == 0){
                 return res.status(400).send({
-                    'message': 'rol no existe'
+                    'message': 'DES_ROL no existe'
                 });
             }else{
                 //Valido la entrada de datos
@@ -107,15 +107,15 @@ let roles = {
 
                 let data = {
                     ID: id,
-                    DES_ROL:(params.rol == '')?roles.DES_ROL:params.rol,
-                    ESTATUS: (params.estatus == '')?roles.ESTATUS:params.estatus,
+                    DES_ROL:(params.DES_ROL == '')?roles.DES_ROL:params.DES_ROL,
+                    ESTATUS: (params.ESTATUS == '')?roles.ESTATUS:params.ESTATUS,
                 }
 
                 //Guardo en la base de datos
                 if(consulta.funciones.update(Roles.TABLA, data)){
                     return res.status(200).send({
-                        'message': 'rol actualizado exitosamente',
-                        'rol': data
+                        'message': 'DES_ROL actualizado exitosamente',
+                        'DES_ROL': data
                     }); 
                 }else{
                     return res.status(400).send({

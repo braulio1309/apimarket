@@ -9,40 +9,40 @@ const consulta = require('../database/mysql')
 const date = new Date();
 
 
-let usuario = {
+let DES_USUARIO = {
 
     crear:async function(req, res) {
        
         let params = req.body;
         //Validar datos
-        params.nombre   = (params.nombre == undefined)?'':params.nombre;
-        params.apellido = (params.apellido == undefined)?'':params.apellido;
-        params.email    = (params.email == undefined)?'':params.email;
-        params.password = (params.password == undefined)?'':params.password;
-        params.usuario  = (params.usuario == undefined)?'':params.usuario;
+        params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_NOMBRE;
+        params.DES_APELLIDO = (params.DES_APELLIDO == undefined)?'':params.DES_APELLIDO;
+        params.DES_CORREO    = (params.DES_CORREO == undefined)?'':params.DES_CORREO;
+        params.DES_PASS = (params.DES_PASS == undefined)?'':params.DES_PASS;
+        params.DES_USUARIO  = (params.DES_USUARIO == undefined)?'':params.DES_USUARIO;
 
-        let validate_nombre     = !validator.isEmpty(params.nombre);
-        let validate_apellido   = !validator.isEmpty(params.apellido);
-        let validate_email      = !validator.isEmpty(params.email) && validator.isEmail(params.email);
-        let validate_pass       = !validator.isEmpty(params.password);
-        let validate_user       = !validator.isEmpty(params.usuario);
+        let validate_DES_NOMBRE     = !validator.isEmpty(params.DES_NOMBRE);
+        let validate_DES_APELLIDO   = !validator.isEmpty(params.DES_APELLIDO);
+        let validate_DES_CORREO      = !validator.isEmpty(params.DES_CORREO) && validator.isEmail(params.DES_CORREO);
+        let validate_pass       = !validator.isEmpty(params.DES_PASS);
+        let validate_user       = !validator.isEmpty(params.DES_USUARIO);
 
-        if(validate_nombre && validate_pass && validate_email){
+        if(validate_DES_NOMBRE && validate_pass && validate_DES_CORREO){
             //Verificamos si existe
             let user =  Usuario;
 
-            user.nombre = params.nombre;
-            user.apellido = params.apellido;
-            user.password = params.password;
-            user.usuario  = params.usuario;
+            user.DES_NOMBRE = params.DES_NOMBRE;
+            user.DES_APELLIDO = params.DES_APELLIDO;
+            user.DES_PASS = params.DES_PASS;
+            user.DES_USUARIO  = params.DES_USUARIO;
             user.rol = null;
-            user.email = params.email;
+            user.DES_CORREO = params.DES_CORREO;
 
             
-            //Si da true el usuario existe
+            //Si da true el DES_USUARIO existe
             //let verifica = user.findOne();
             
-            const verifica = await pool.query(consulta.search('USUARIOS', 'DES_CORREO', user.email, 'equals'))
+            const verifica = await pool.query(consulta.search('USUARIOS', 'DES_CORREO', user.DES_CORREO, 'equals'))
             
            console.log(verifica.length)
             if(verifica.length > 0){
@@ -51,14 +51,14 @@ let usuario = {
                 });
             }else{
                 //Guardo en la base de datos
-                bcrypt.hash(params.password, 4, async function(err, hash) {
-                    user.password = hash;
+                bcrypt.hash(params.DES_PASS, 4, async function(err, hash) {
+                    user.DES_PASS = hash;
                     let data = {
-                       DES_NOMBRE: user.nombre,
-                       DES_USUARIO: user.usuario,
-                       DES_PASS:user.password,
-                       DES_CORREO:user.email,
-                       DES_APELLIDO:user.apellido,
+                       DES_NOMBRE: user.DES_NOMBRE,
+                       DES_USUARIO: user.DES_USUARIO,
+                       DES_PASS:user.DES_PASS,
+                       DES_CORREO:user.DES_CORREO,
+                       DES_APELLIDO:user.DES_APELLIDO,
                        FECHA: date,
                        ESTATUS: 1
                     }
@@ -70,7 +70,7 @@ let usuario = {
                         }); 
                     }else{
                         return res.status(400).send({
-                            'message': 'Error al guardar el usuario',
+                            'message': 'Error al guardar el DES_USUARIO',
                            
                         }); 
                     }
@@ -87,7 +87,7 @@ let usuario = {
 
     mostrar: async function(req, res){
        
-        let user =  await pool.query(consulta.list('usuarios'))
+        let user =  await pool.query(consulta.list('DES_USUARIOs'))
         return res.status(200).send({
             'lista': user
         })
@@ -99,39 +99,39 @@ let usuario = {
         let params = req.body;
 
         //Validamos datos
-        params.email    = (params.email == undefined)?'':params.email;
-        params.password = (params.password == undefined)?'':params.password;
+        params.DES_CORREO    = (params.DES_CORREO == undefined)?'':params.DES_CORREO;
+        params.DES_PASS = (params.DES_PASS == undefined)?'':params.DES_PASS;
 
-        let validate_email      = !validator.isEmpty(params.email) && validator.isEmail(params.email);
-        let validate_pass       = !validator.isEmpty(params.password);
+        let validate_DES_CORREO      = !validator.isEmpty(params.DES_CORREO) && validator.isEmail(params.DES_CORREO);
+        let validate_pass       = !validator.isEmpty(params.DES_PASS);
         let user = Usuario;
-        if(validate_email && validate_pass){
+        if(validate_DES_CORREO && validate_pass){
 
-            //Buscar usuario si coincide
-            const verifica = await pool.query(consulta.search('USUARIOS', 'DES_CORREO', user.email, 'equals'))
+            //Buscar DES_USUARIO si coincide
+            const verifica = await pool.query(consulta.search('USUARIOS', 'DES_CORREO', user.DES_CORREO, 'equals'))
             if(verifica){
 
                 //Verificamos la contraseña
-                user.email = params.email;
-                user.password = params.password;
-                console.log(consulta.custom(`SELECT * FROM usuarios WHERE DES_CORREO = '${user.email}'`))
-                let usuario = await pool.query(consulta.custom(`SELECT * FROM usuarios WHERE DES_CORREO = '${user.email}'`));
+                user.DES_CORREO = params.DES_CORREO;
+                user.DES_PASS = params.DES_PASS;
+                console.log(consulta.custom(`SELECT * FROM DES_USUARIOs WHERE DES_CORREO = '${user.DES_CORREO}'`))
+                let DES_USUARIO = await pool.query(consulta.custom(`SELECT * FROM DES_USUARIOs WHERE DES_CORREO = '${user.DES_CORREO}'`));
 
-                console.log(usuario)
-                bcrypt.compare(params.password, usuario[0].DES_PASS, (err, check) => {
+                console.log(DES_USUARIO)
+                bcrypt.compare(params.DES_PASS, DES_USUARIO[0].DES_PASS, (err, check) => {
                     
                     if(check){
                         //generamos JWT
                         if(params.gettoken){
                             return res.status(200).send({
-                               token: jwt.createToken(usuario[0]),
+                               token: jwt.createToken(DES_USUARIO[0]),
 
                             }); 
                         }
 
                     }else{
                         return res.status(400).send({
-                            'message': 'El usuario no existe'
+                            'message': 'El DES_USUARIO no existe'
                         });
                     }
                 })
@@ -150,82 +150,81 @@ let usuario = {
 
         //Validar datos
         let id = req.params.id //ID por parametros
-        params.nombre   = (params.nombre == undefined)?'':params.nombre;
-        params.apellido = (params.apellido == undefined)?'':params.apellido;
-        params.email    = (params.email == undefined)?'':params.email;
-        params.password = (params.password == undefined)?'':params.password;
-        params.usuario  = (params.usuario == undefined)?'':params.usuario;
+        params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_NOMBRE;
+        params.DES_APELLIDO = (params.DES_APELLIDO == undefined)?'':params.DES_APELLIDO;
+        params.DES_CORREO    = (params.DES_CORREO == undefined)?'':params.DES_CORREO;
+        params.DES_PASS = (params.DES_PASS == undefined)?'':params.DES_PASS;
+        params.DES_USUARIO  = (params.DES_USUARIO == undefined)?'':params.DES_USUARIO;
         
-        let validate_nombre     = !validator.isEmpty(params.nombre);
-        let validate_apellido   = !validator.isEmpty(params.apellido);
-        let validate_email      = !validator.isEmpty(params.email) && validator.isEmail(params.email);
-        let validate_pass       = !validator.isEmpty(params.password);
-        let validate_user       = !validator.isEmpty(params.usuario);
+        let validate_DES_NOMBRE     = !validator.isEmpty(params.DES_NOMBRE);
+        let validate_DES_APELLIDO   = !validator.isEmpty(params.DES_APELLIDO);
+        let validate_DES_CORREO      = !validator.isEmpty(params.DES_CORREO) && validator.isEmail(params.DES_CORREO);
+        let validate_pass       = !validator.isEmpty(params.DES_PASS);
+        let validate_user       = !validator.isEmpty(params.DES_USUARIO);
        
        
 
-        if((validate_nombre || validate_apellido || validate_email|| validate_pass || validate_user) && req.user.sub == id){ //Valido que solo el usuario pueda modificar su propio usuario
+        if((validate_DES_NOMBRE || validate_DES_APELLIDO || validate_DES_CORREO|| validate_pass || validate_user) && req.user.sub == id){ //Valido que solo el DES_USUARIO pueda modificar su propio DES_USUARIO
             let user =  Usuario;
 
             //Valido duplicidad
-            if(params.email != ''){
-                let email =  await pool.query(consulta.search('USUARIOS', 'DES_CORREO', params.email, 'equals'))
-                if(email.length != 0){
+            if(params.DES_CORREO != ''){
+                let DES_CORREO =  await pool.query(consulta.search('USUARIOS', 'DES_CORREO', params.DES_CORREO, 'equals'))
+                if(DES_CORREO.length != 0){
                     return res.status(400).send({
                         'message': 'El correo ya fue tomado'
                     });
                 }
             }
 
-            //Busco el usuario a actualizar y verifico si existe
-            let usuario =  await pool.query(consulta.get("usuarios", id));
+            //Busco el DES_USUARIO a actualizar y verifico si existe
+            let DES_USUARIO =  await pool.query(consulta.get("DES_USUARIOs", id));
 
-            if(usuario.length == 0){
+            if(DES_USUARIO.length == 0){
                 return res.status(400).send({
                     'message': 'Usuario no existe'
                 });
             }else{
                 //Valido la entrada de datos
-                usuario = usuario[0]
-                user.nombre   = (params.nombre == '')?usuario.DES_NOMBRE:params.nombre;
-                user.apellido = (params.apellido == '')?usuario.DES_APELLIDO: params.apellido;
-                user.password = (params.password == '')?usuario.DES_PASS:params.password;
-                user.usuario  = (params.usuario == '')?usuario.DES_USUARIO:params.usuario;
-                user.rol      = null;
-                user.email    = (params.email == '')?usuario.DES_CORREO:params.email;
+                DES_USUARIO = DES_USUARIO[0]
+                user.DES_NOMBRE   = (params.DES_NOMBRE == '')?DES_USUARIO.DES_NOMBRE:params.DES_NOMBRE;
+                user.DES_APELLIDO = (params.DES_APELLIDO == '')?DES_USUARIO.DES_APELLIDO: params.DES_APELLIDO;
+                user.DES_PASS = (params.DES_PASS == '')?DES_USUARIO.DES_PASS:params.DES_PASS;
+                user.DES_USUARIO  = (params.DES_USUARIO == '')?DES_USUARIO.DES_USUARIO:params.DES_USUARIO;
+                user.DES_CORREO    = (params.DES_CORREO == '')?DES_USUARIO.DES_CORREO:params.DES_CORREO;
 
                 let data = {
                     ID: id,
-                    DES_NOMBRE: user.nombre,
-                    DES_APELLIDO: user.apellido,
-                    DES_CORREO:user.email,
-                    DES_PASS:user.password,
-                    DES_USUARIO: user.usuario
+                    DES_NOMBRE: user.DES_NOMBRE,
+                    DES_APELLIDO: user.DES_APELLIDO,
+                    DES_CORREO:user.DES_CORREO,
+                    DES_PASS:user.DES_PASS,
+                    DES_USUARIO: user.DES_USUARIO
                 }
                 //Guardo en la base de datos
-                if(params.password == undefined){
-                    if(consulta.funciones.update('usuarios', data)){
+                if(params.DES_PASS == undefined){
+                    if(consulta.funciones.update('DES_USUARIOs', data)){
                         return res.status(200).send({
                             'message': 'Usuario actualizado exitosamente',
                             'user': user
                         }); 
                     }else{
                         return res.status(400).send({
-                            'message': 'Error al actualizar el usuario',
+                            'message': 'Error al actualizar el DES_USUARIO',
                            
                         }); 
                     }
                 }else{
-                    bcrypt.hash(params.password, 4, function(err, hash) {
+                    bcrypt.hash(params.DES_PASS, 4, function(err, hash) {
                         data.DES_PASS = hash;
-                        if(consulta.funciones.update('usuarios', data)){
+                        if(consulta.funciones.update('DES_USUARIOs', data)){
                             return res.status(200).send({
                                 'message': 'Usuario actualizado exitosamente',
                                 'user': data
                             }); 
                         }else{
                             return res.status(400).send({
-                                'message': 'Error al actualizar el usuario',
+                                'message': 'Error al actualizar el DES_USUARIO',
                                
                             }); 
                         }
@@ -245,18 +244,18 @@ let usuario = {
     delete:async function(req, res){
         if(req.user.sub == req.params.id){
             //console.log('sda')
-            const borrar = await pool.query(consulta.remove('usuarios', req.user.sub));
+            const borrar = await pool.query(consulta.remove('DES_USUARIOs', req.user.sub));
             return res.status(200).send({
                 'message': 'Usuario eliminado exitosamente',
                 'user': req.user
             }); 
         }else{
             return res.status(400).send({
-                'message': 'El usuario no tiene permiso para realizar esta acción'
+                'message': 'El DES_USUARIO no tiene permiso para realizar esta acción'
             });
         }
     }
 
 }
 
-module.exports = usuario;
+module.exports = DES_USUARIO;

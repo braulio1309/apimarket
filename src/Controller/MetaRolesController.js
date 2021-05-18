@@ -13,31 +13,31 @@ let metaroles = {
        
         let params = req.body;
         //Validar datos
-        params.key   = (params.key == undefined)?'':params.key;
-        params.value   = (params.value == undefined)?'':params.value;
-        params.rol   = (params.rol == undefined)?'':params.rol;
+        params.DES_META_KEY   = (params.DES_META_KEY == undefined)?'':params.DES_META_KEY;
+        params.DES_META_VALUE   = (params.DES_META_VALUE == undefined)?'':params.DES_META_VALUE;
+        params.ID_ROL   = (params.ID_ROL == undefined)?'':params.ID_ROL;
 
-        let validate_key    = !validator.isEmpty(params.key);
-        let validate_value  = !validator.isEmpty(params.value);
-        let validate_rol_id  = !validator.isEmpty(params.rol);
+        let validate_key    = !validator.isEmpty(params.DES_META_KEY);
+        let validate_value  = !validator.isEmpty(params.DES_META_VALUE);
+        let validate_rol_id  = !validator.isEmpty(params.ID_ROL);
 
 
 
         if(validate_key && validate_value && validate_rol_id){
             
-            //valido que el rol exista
-            const rol = await pool.query(consulta.get(ROLES.TABLA, params.rol));
+            //valido que el ID_ROL exista
+            const ID_ROL = await pool.query(consulta.get(ROLES.TABLA, params.ID_ROL));
 
-            if(rol.length == 0){
+            if(ID_ROL.length == 0){
                 return res.status(400).send({
-                    'message': 'Rol inexistente'
+                    'message': 'ID_ROL inexistente'
                 });
             }
 
             //Verificamos si ya existe el metadato 
-            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAROLES.TABLA} WHERE ${METAROLES.ID_ROL} = ${params.rol} 
-            AND ${METAROLES.KEY} = '${params.key}' 
-            AND ${METAROLES.VALUE} = '${params.value}'`));
+            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAROLES.TABLA} WHERE ${METAROLES.ID_ROL} = ${params.ID_ROL} 
+            AND ${METAROLES.DES_META_KEY} = '${params.DES_META_KEY}' 
+            AND ${METAROLES.DES_META_VALUE} = '${params.DES_META_VALUE}'`));
             
             if(verifica.length > 0){
                 return res.status(400).send({
@@ -47,9 +47,9 @@ let metaroles = {
                 
                 //Guardo en la base de datos
                 const data = {
-                    ID_ROL: params.rol,
-                    DES_META_KEY:params.key,
-                    DES_META_VALUE:params.value,
+                    ID_ROL: params.ID_ROL,
+                    DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:params.DES_META_VALUE,
                     FECHA: date,
                     ESTATUS: 1
                 }
@@ -93,21 +93,21 @@ let metaroles = {
         let id = req.params.id //ID por parametros
         
         //Validar datos
-        params.key   = (params.key == undefined)?'':params.key;
-        params.value   = (params.value == undefined)?'':params.value;
-        params.rol   = (params.rol == undefined)?'':params.rol;
+        params.DES_META_KEY   = (params.DES_META_KEY == undefined)?'':params.DES_META_KEY;
+        params.DES_META_VALUE   = (params.DES_META_VALUE == undefined)?'':params.DES_META_VALUE;
+        params.ID_ROL   = (params.ID_ROL == undefined)?'':params.ID_ROL;
         params.estatus   = (params.estatus == undefined)?'':params.estatus;
 
-        let validate_key    = !validator.isEmpty(params.key);
-        let validate_value  = !validator.isEmpty(params.value);
-        let validate_rol_id  = !validator.isEmpty(params.rol);
+        let validate_key    = !validator.isEmpty(params.DES_META_KEY);
+        let validate_value  = !validator.isEmpty(params.DES_META_VALUE);
+        let validate_rol_id  = !validator.isEmpty(params.ID_ROL);
 
         if((validate_key || validate_value) && validate_rol_id){
            
              //Valido duplicidad
-            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAROLES.TABLA} WHERE ${METAROLES.ID_ROL} = ${params.rol} 
-            AND (${METAROLES.KEY} = '${params.key}' 
-            AND ${METAROLES.VALUE} = '${params.value}')`));                
+            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAROLES.TABLA} WHERE ${METAROLES.ID_ROL} = ${params.ID_ROL} 
+            AND (${METAROLES.DES_META_KEY} = '${params.DES_META_KEY}' 
+            AND ${METAROLES.DES_META_VALUE} = '${params.DES_META_VALUE}')`));                
 
             if(verifica.length != 0){
                 return res.status(400).send({
@@ -130,8 +130,8 @@ let metaroles = {
                 let data = {
                     ID: id,
                     ID_ROL: meta.ID_ROL,
-                    DES_META_KEY:(params.key == '')?meta.DES_META_KEY:params.key,
-                    DES_META_VALUE:(params.value == '')?meta.DES_META_VALUE:params.value,
+                    DES_META_KEY:(params.DES_META_KEY == '')?meta.DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:(params.DES_META_VALUE == '')?meta.DES_META_VALUE:params.DES_META_VALUE,
                     ESTATUS: (params.estatus == '')?meta.ESTATUS:params.estatus,
                     FECHA: meta.FECHA
                 }

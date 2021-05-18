@@ -12,11 +12,11 @@ let metaUsuarios = {
        
         let params = req.body;
         //Validar datos
-        params.key   = (params.key == undefined)?'':params.key;
-        params.value   = (params.value == undefined)?'':params.value;
+        params.DES_META_KEY   = (params.DES_META_KEY == undefined)?'':params.DES_META_KEY;
+        params.DES_META_VALUE   = (params.DES_META_VALUE == undefined)?'':params.DES_META_VALUE;
 
-        let validate_key    = !validator.isEmpty(params.key);
-        let validate_value  = !validator.isEmpty(params.value);
+        let validate_key    = !validator.isEmpty(params.DES_META_KEY);
+        let validate_value  = !validator.isEmpty(params.DES_META_VALUE);
 
 
         if(validate_key && validate_value){
@@ -24,8 +24,8 @@ let metaUsuarios = {
             //Verificamos si existe
            
             const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAUSUARIOS.TABLA} WHERE ${METAUSUARIOS.ID_USUARIO} = ${req.user.sub} 
-            AND ${METAUSUARIOS.KEY} = '${params.key}' 
-            AND ${METAUSUARIOS.VALUE} = '${params.value}'`));
+            AND ${METAUSUARIOS.DES_META_KEY} = '${params.DES_META_KEY}' 
+            AND ${METAUSUARIOS.DES_META_VALUE} = '${params.DES_META_VALUE}'`));
             
             if(verifica.length > 0){
                 return res.status(400).send({
@@ -36,8 +36,8 @@ let metaUsuarios = {
                 //Guardo en la base de datos
                 const data = {
                     ID_USUARIO: req.user.sub,
-                    DES_META_KEY:params.key,
-                    DES_META_VALUE:params.value,
+                    DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:params.DES_META_VALUE,
                     FECHA: date,
                     ESTATUS: 1
                 }
@@ -81,19 +81,19 @@ let metaUsuarios = {
         let id = req.params.id //ID por parametros
         
         //Validar datos
-        params.key   = (params.key == undefined)?'':params.key;
-        params.value   = (params.value == undefined)?'':params.value;
+        params.DES_META_KEY   = (params.DES_META_KEY == undefined)?'':params.DES_META_KEY;
+        params.DES_META_VALUE   = (params.DES_META_VALUE == undefined)?'':params.DES_META_VALUE;
 
-        let validate_key    = !validator.isEmpty(params.key);
-        let validate_value  = !validator.isEmpty(params.value);
+        let validate_key    = !validator.isEmpty(params.DES_META_KEY);
+        let validate_value  = !validator.isEmpty(params.DES_META_VALUE);
 
         if(validate_key || validate_value){
            
              //Valido duplicidad
            
             const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAUSUARIOS.TABLA} WHERE ${METAUSUARIOS.ID_USUARIO} = ${req.user.sub} 
-            AND (${METAUSUARIOS.KEY} = '${params.key}' 
-            AND ${METAUSUARIOS.VALUE} = '${params.value}')`));                
+            AND (${METAUSUARIOS.DES_META_KEY} = '${params.DES_META_KEY}' 
+            AND ${METAUSUARIOS.DES_META_VALUE} = '${params.DES_META_VALUE}')`));                
 
             if(verifica.length != 0){
                 return res.status(400).send({
@@ -116,8 +116,8 @@ let metaUsuarios = {
                 let data = {
                     ID: id,
                     ID_USUARIO: meta.ID_USUARIO,
-                    DES_META_KEY:(params.key == '')?meta.DES_META_KEY:params.key,
-                    DES_META_VALUE:(params.value == '')?meta.DES_META_VALUE:params.value,
+                    DES_META_KEY:(params.DES_META_KEY == '')?meta.DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:(params.DES_META_VALUE == '')?meta.DES_META_VALUE:params.DES_META_VALUE,
                     ESTATUS: (params.estatus == '')?meta.ESTATUS:params.estatus,
                     FECHA: meta.FECHA
                 }

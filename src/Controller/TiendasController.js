@@ -11,41 +11,41 @@ const tiendas = {
         let params = req.body;
 
         //Validar datos
-        params.nombre   = (params.nombre == undefined)?'':params.nombre;
-        params.slug   = (params.slug == undefined)?'':params.slug;
-        params.comision   = (params.comision == undefined)?'':params.comision;
-        params.banner_lt   = (params.banner_lt == undefined)?'':params.banner_lt;
-        params.email   = (params.email == undefined)?'':params.email;
-        params.logo   = (params.logo == undefined)?'':params.logo;
-        params.banner   = (params.banner == undefined)?'':params.banner;
+        params.DES_NOMBRE_TIENDA   = (params.DES_NOMBRE_TIENDA == undefined)?'':params.DES_NOMBRE_TIENDA;
+        params.DES_SLUG_TIENDA   = (params.DES_SLUG_TIENDA == undefined)?'':params.DES_SLUG_TIENDA;
+        params.NUM_COMISION   = (params.NUM_COMISION == undefined)?'':params.NUM_COMISION;
+        params.DES_URL_BANNER_LT   = (params.DES_URL_BANNER_LT == undefined)?'':params.DES_URL_BANNER_LT;
+        params.DES_CORREO_TIENDA   = (params.DES_CORREO_TIENDA == undefined)?'':params.DES_CORREO_TIENDA;
+        params.DES_URL_LOGO   = (params.DES_URL_LOGO == undefined)?'':params.DES_URL_LOGO;
+        params.DES_URL_BANNER   = (params.DES_URL_BANNER == undefined)?'':params.DES_URL_BANNER;
 
-        let validate_nombre   = !validator.isEmpty(params.nombre);
-        let validate_slug  = !validator.isEmpty(params.slug);
-        let validate_comision  = !validator.isEmpty(params.comision);
-        let validate_banner_lt   = !validator.isEmpty(params.banner_lt);
-        let validate_email  = !validator.isEmpty(params.email);
-        let validate_logo  = !validator.isEmpty(params.logo);
-        let validate_banner   = !validator.isEmpty(params.banner);
+        let validate_DES_NOMBRE_TIENDA   = !validator.isEmpty(params.DES_NOMBRE_TIENDA);
+        let validate_DES_SLUG_TIENDA  = !validator.isEmpty(params.DES_SLUG_TIENDA);
+        let validate_NUM_COMISION  = !validator.isEmpty(params.NUM_COMISION);
+        let validate_DES_URL_BANNER_LT   = !validator.isEmpty(params.DES_URL_BANNER_LT);
+        let validate_DES_CORREO_TIENDA  = !validator.isEmpty(params.DES_CORREO_TIENDA);
+        let validate_DES_URL_LOGO  = !validator.isEmpty(params.DES_URL_LOGO);
+        let validate_DES_URL_BANNER   = !validator.isEmpty(params.DES_URL_BANNER);
 
-        if(validate_nombre && validate_slug && validate_comision && validate_email){
+        if(validate_DES_NOMBRE_TIENDA && validate_DES_SLUG_TIENDA && validate_NUM_COMISION && validate_DES_CORREO_TIENDA){
 
-            //Valido que el nombre, el correo o el slug no esten tomados
-            const valida = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.NOMBRE, params.nombre, 'equals'));
+            //Valido que el DES_NOMBRE_TIENDA, el correo o el DES_SLUG_TIENDA no esten tomados
+            const valida = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.NOMBRE, params.DES_NOMBRE_TIENDA, 'equals'));
             if(valida.length > 0){
                 return res.status(400).send({
                     'message': 'Nombre de la tienda ya fue tomado'
                 });
             }
 
-            const valida_correo = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.CORREO, params.email, 'equals'));
+            const valida_correo = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.CORREO, params.DES_CORREO_TIENDA, 'equals'));
             if(valida_correo.length > 0){
                 return res.status(400).send({
                     'message': 'Correo de la tienda ya fue tomado'
                 });
             }
 
-            const valida_slug = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.SLUG, params.slug, 'equals'));
-            if(valida_slug.length > 0){
+            const valida_DES_SLUG_TIENDA = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.SLUG, params.DES_SLUG_TIENDA, 'equals'));
+            if(valida_DES_SLUG_TIENDA.length > 0){
                 return res.status(400).send({
                     'message': 'Nombre de la tienda ya fue tomado'
                 });
@@ -53,13 +53,13 @@ const tiendas = {
 
             const data = {
                 ID_USUARIO: req.user.sub,
-                DES_SLUG_TIENDA:params.slug,
-                DES_NOMBRE_TIENDA:params.nombre,
-                NUM_COMISION:params.comision,
-                DES_CORREO_TIENDA:params.email,
-                DES_URL_LOGO: params.logo,
-                DES_URL_BANNER:params.banner,
-                DES_URL_BANNER_LT:params.banner_lt,
+                DES_SLUG_TIENDA:params.DES_SLUG_TIENDA,
+                DES_NOMBRE_TIENDA:params.DES_NOMBRE_TIENDA,
+                NUM_COMISION:params.NUM_COMISION,
+                DES_CORREO_TIENDA:params.DES_CORREO_TIENDA,
+                DES_URL_LOGO: params.DES_URL_LOGO,
+                DES_URL_BANNER:params.DES_URL_BANNER,
+                DES_URL_BANNER_LT:params.DES_URL_BANNER_LT,
                 FECHA:date, 
                 ESTATUS: 1
             }
@@ -90,25 +90,25 @@ const tiendas = {
 
         //Validar datos
         const id = req.params.id
-        params.nombre   = (params.nombre == undefined)?'':params.nombre;
-        params.slug   = (params.slug == undefined)?'':params.slug;
-        params.comision   = (params.comision == undefined)?'':params.comision;
-        params.banner_lt   = (params.banner_lt == undefined)?'':params.banner_lt;
-        params.email   = (params.email == undefined)?'':params.email;
-        params.logo   = (params.logo == undefined)?'':params.logo;
-        params.banner   = (params.banner == undefined)?'':params.banner;
-        params.estatus   = (params.estatus == undefined)?'':params.estatus;
+        params.DES_NOMBRE_TIENDA   = (params.DES_NOMBRE_TIENDA == undefined)?'':params.DES_NOMBRE_TIENDA;
+        params.DES_SLUG_TIENDA   = (params.DES_SLUG_TIENDA == undefined)?'':params.DES_SLUG_TIENDA;
+        params.NUM_COMISION   = (params.NUM_COMISION == undefined)?'':params.NUM_COMISION;
+        params.DES_URL_BANNER_LT   = (params.DES_URL_BANNER_LT == undefined)?'':params.DES_URL_BANNER_LT;
+        params.DES_CORREO_TIENDA   = (params.DES_CORREO_TIENDA == undefined)?'':params.DES_CORREO_TIENDA;
+        params.DES_URL_LOGO   = (params.DES_URL_LOGO == undefined)?'':params.DES_URL_LOGO;
+        params.DES_URL_BANNER   = (params.DES_URL_BANNER == undefined)?'':params.DES_URL_BANNER;
+        params.ESTATUS   = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
-        let validate_nombre   = !validator.isEmpty(params.nombre);
-        let validate_slug  = !validator.isEmpty(params.slug);
-        let validate_comision  = !validator.isEmpty(params.comision);
-        let validate_banner_lt   = !validator.isEmpty(params.banner_lt);
-        let validate_email  = !validator.isEmpty(params.email);
-        let validate_logo  = !validator.isEmpty(params.logo);
-        let validate_banner   = !validator.isEmpty(params.banner);
-        let validate_estatus   = !validator.isEmpty(params.estatus);
+        let validate_DES_NOMBRE_TIENDA   = !validator.isEmpty(params.DES_NOMBRE_TIENDA);
+        let validate_DES_SLUG_TIENDA  = !validator.isEmpty(params.DES_SLUG_TIENDA);
+        let validate_NUM_COMISION  = !validator.isEmpty(params.NUM_COMISION);
+        let validate_DES_URL_BANNER_LT   = !validator.isEmpty(params.DES_URL_BANNER_LT);
+        let validate_DES_CORREO_TIENDA  = !validator.isEmpty(params.DES_CORREO_TIENDA);
+        let validate_DES_URL_LOGO  = !validator.isEmpty(params.DES_URL_LOGO);
+        let validate_DES_URL_BANNER   = !validator.isEmpty(params.DES_URL_BANNER);
+        let validate_ESTATUS   = !validator.isEmpty(params.ESTATUS);
 
-        if(validate_nombre && validate_slug && validate_comision && validate_email && validate_estatus){
+        if(validate_DES_NOMBRE_TIENDA && validate_DES_SLUG_TIENDA && validate_NUM_COMISION && validate_DES_CORREO_TIENDA && validate_ESTATUS){
 
             //Valido que exista la tienda que actualizaré
             
@@ -119,23 +119,23 @@ const tiendas = {
                 });
             }
 
-            //Valido que el nombre, el correo o el slug no esten tomados
-            const valida = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.NOMBRE, params.nombre, 'equals'));
-            if(valida.length > 0 && tienda[0].DES_NOMBRE_TIENDA != params.nombre){
+            //Valido que el DES_NOMBRE_TIENDA, el correo o el DES_SLUG_TIENDA no esten tomados
+            const valida = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.NOMBRE, params.DES_NOMBRE_TIENDA, 'equals'));
+            if(valida.length > 0 && tienda[0].DES_NOMBRE_TIENDA != params.DES_NOMBRE_TIENDA){
                 return res.status(400).send({
                     'message': 'Nombre de la tienda ya fue tomado'
                 });
             }
 
-            const valida_correo = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.CORREO, params.email, 'equals'));
-            if(valida_correo.length > 0 && tienda[0].DES_CORREO_TIENDA != params.email){
+            const valida_correo = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.CORREO, params.DES_CORREO_TIENDA, 'equals'));
+            if(valida_correo.length > 0 && tienda[0].DES_CORREO_TIENDA != params.DES_CORREO_TIENDA){
                 return res.status(400).send({
                     'message': 'Correo de la tienda ya fue tomado'
                 });
             }
 
-            const valida_slug = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.SLUG, params.slug, 'equals'));
-            if(valida_slug.length > 0 && tienda[0].DES_SLUG_TIENDA != params.slug){
+            const valida_DES_SLUG_TIENDA = await pool.query(consulta.search(TIENDAS.TABLA, TIENDAS.SLUG, params.DES_SLUG_TIENDA, 'equals'));
+            if(valida_DES_SLUG_TIENDA.length > 0 && tienda[0].DES_SLUG_TIENDA != params.DES_SLUG_TIENDA){
                 return res.status(400).send({
                     'message': 'Nombre de la tienda ya fue tomado'
                 });
@@ -145,15 +145,15 @@ const tiendas = {
             const data = {
                 ID:id,
                 ID_USUARIO: req.user.sub,
-                DES_SLUG_TIENDA:(params.slug == '')?tienda.DES_SLUG_TIENDA:params.slug,
-                DES_NOMBRE_TIENDA:(params.nombre == '')?tienda.DES_NOMBRE_TIENDA:params.nombre,
-                NUM_COMISION:(params.comision == '')?tienda.NUM_COMISION:params.comision,
-                DES_CORREO_TIENDA:(params.email == '')?tienda.DES_CORREO_TIENDA:params.email,
-                DES_URL_LOGO: (params.logo == '')?tienda.DES_URL_LOGO:params.logo,
-                DES_URL_BANNER:(params.banner == '')?tienda.DES_URL_BANNER:params.banner,
-                DES_URL_BANNER_LT:(params.banner_lt == '')?tienda.DES_URL_BANNER_LT:params.banner_lt,
+                DES_SLUG_TIENDA:(params.DES_SLUG_TIENDA == '')?tienda.DES_SLUG_TIENDA:params.DES_SLUG_TIENDA,
+                DES_NOMBRE_TIENDA:(params.DES_NOMBRE_TIENDA == '')?tienda.DES_NOMBRE_TIENDA:params.DES_NOMBRE_TIENDA,
+                NUM_COMISION:(params.NUM_COMISION == '')?tienda.NUM_COMISION:params.NUM_COMISION,
+                DES_CORREO_TIENDA:(params.DES_CORREO_TIENDA == '')?tienda.DES_CORREO_TIENDA:params.DES_CORREO_TIENDA,
+                DES_URL_LOGO: (params.DES_URL_LOGO == '')?tienda.DES_URL_LOGO:params.DES_URL_LOGO,
+                DES_URL_BANNER:(params.DES_URL_BANNER == '')?tienda.DES_URL_BANNER:params.DES_URL_BANNER,
+                DES_URL_BANNER_LT:(params.DES_URL_BANNER_LT == '')?tienda.DES_URL_BANNER_LT:params.DES_URL_BANNER_LT,
                 FECHA:tienda.FECHA, 
-                ESTATUS: (params.estatus == '')?tienda.ESTATUS:params.estatus,
+                ESTATUS: (params.ESTATUS == '')?tienda.ESTATUS:params.ESTATUS,
             }
 
             consulta.funciones.update(TIENDAS.TABLA, data);
