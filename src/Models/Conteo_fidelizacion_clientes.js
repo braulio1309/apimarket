@@ -1,0 +1,14 @@
+
+const suscripciones = {
+    TABLA:  'conteo_fidelizacion_clientes',
+    ID_REGISTRO_FIDELIZACION_CLIENTE: 'ID_REGISTRO_FIDELIZACION_CLIENTE',
+    ID_FIDELIZACION_CLIENTE: 'ID_FIDELIZACION_CLIENTE',
+    ID_TOKEN_URL: 'ID_TOKEN_URL',
+    ID_USUARIO: 'ID_USUARIO',
+    DES_IP: 'DES_IP',
+    DES_ID_NAVEGADOR: 'DES_ID_NAVEGADOR',
+    FECHA: 'FECHA',
+    ESTATUS: 'ESTATUS'
+}
+
+module.exports = suscripciones;

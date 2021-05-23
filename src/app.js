@@ -27,6 +27,16 @@ const zonas_routes                  = require('./routes/zonas_envios');
 const pedidos_productos_routes      = require('./routes/pedidos_productos');
 const meta_pedidos_productos_routes      = require('./routes/metapedidosproductos');
 const suscripciones_routes      = require('./routes/suscripciones');
+const reglas_descuento_routes      = require('./routes/reglas_descuento');
+const cupones_routes      = require('./routes/cupones');
+const fidelizacion_clientes_routes      = require('./routes/fidelizacion_clientes');
+const uso_cupones_routes      = require('./routes/uso_cupones_usuarios');
+const uso_reglas_descuentos_routes      = require('./routes/uso_cupones_usuarios');
+
+
+
+
+
 
 //Middlewares
 app.use(express.urlencoded({extended:false}));
@@ -53,6 +63,16 @@ app.use('/api', zonas_routes);
 app.use('/api', pedidos_productos_routes);
 app.use('/api', meta_pedidos_productos_routes);
 app.use('/api', suscripciones_routes);
+app.use('/api', reglas_descuento_routes);
+app.use('/api', cupones_routes);
+app.use('/api', fidelizacion_clientes_routes);
+app.use('/api', uso_cupones_routes);
+app.use('/api', uso_reglas_descuentos_routes);
+
+
+
+
+
 
 
 
