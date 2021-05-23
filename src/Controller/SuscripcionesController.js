@@ -87,14 +87,16 @@ const productos = {
         });
     },
 
-    /*update:async function(req, res){
+    update:async function(req, res){
         let params = req.body;
 
         //Validar datos
-        const id = req.params.id
+        const ID_USUARIO = req.params.ID_USUARIO
+        const ID_PRODUCTO = req.params.ID_PRODUCTO
+        const ID_PEDIDO = req.params.ID_PEDIDO
+
          //Validar datos
-         params.ID_PRODUCTO       = (params.ID_PRODUCTO == undefined)?null:params.ID_PRODUCTO;
-         params.ID_PEDIDO         = (params.ID_PEDIDO == undefined)?null:params.ID_PEDIDO;
+        
          params.NUM_TIPO_FRECUENCIA_PAGO     = (params.NUM_TIPO_FRECUENCIA_PAGO == undefined)?0:params.NUM_TIPO_FRECUENCIA_PAGO;
          params.NUM_FRECUENCIA_PAGO          = (params.NUM_FRECUENCIA_PAGO == undefined)?0:params.NUM_FRECUENCIA_PAGO;
          params.JSON_NOTAS   = (params.JSON_NOTAS == undefined)?null:params.JSON_NOTAS;
@@ -103,20 +105,17 @@ const productos = {
          params.FECHA_FIN       = (params.FECHA_FIN == undefined)?null:params.FECHA_FIN;
          params.ESTATUS       = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
-      
-       
-
         if(validate_nombre || validate_slug || validate_estatus){
 
             //Valido si la tienda existe
-            const producto = await pool.query(consulta.get(PRODUCTOS.TABLA, params.ID_PRODUCTO));
+            const producto = await pool.query(consulta.get(PRODUCTOS.TABLA, ID_PRODUCTO));
             if(tienda.length == 0){
                 return res.status(400).send({
                     'message': 'Tienda no existe'
                 });
             }
 
-            const pedido = await pool.query(consulta.get(PEDIDOS.TABLA,  params.ID_PEDIDO));
+            const pedido = await pool.query(consulta.get(PEDIDOS.TABLA,  ID_PEDIDO));
             if(tienda.length == 0){
                 return res.status(400).send({
                     'message': 'Pedido no existe'
@@ -127,28 +126,31 @@ const productos = {
             //Guardar en la base de datos
             const data = {
                 ID: id,
-                ID_TIENDA: produc.ID_TIENDA,
-                DES_SLUG_PRODUCTO:(params.slug == '')?produc.DES_SLUG_PRODUCTO:params.slug,
-                DES_SKU:(params.sku == '')?produc.DES_SKU_PRODUCTO:params.sku,
-                DES_NOMBRE_PRODUCTO:(params.nombre == '')?produc.DES_NOMBRE_PRODUCTO:params.nombre,
-                DES_DESCRIPCION_CORTA:(params.descripcion_corta == '')?produc.DES_DESCRIPCION_CORTA:params.slug, 
-                DES_DESCRIPCION_LARGA: (params.descripcion_larga == '')?produc.DES_DESCRIPCION_LARGA:params.DES_DESCRIPCION_LARGA,
-                DES_URL_DESCARGAR:(params.descargar == '')?produc.DES_URL_DESCARGAR:params.descargar, 
-                DES_URL_IMAGEN: (params.imagen == '')?produc.DES_URL_IMAGEN:params.imagen,
-                NUM_TIPO_PRODUCTO: (params.tipo == 0)?produc.NUM_TIPO_PRODUCTO:parseInt(params.tipo),
-                NUM_PRECIO_VENTA: (params.precio_venta == 0)?produc.NUM_PRECIO_VENTA:parseFloat(params.precio_venta),
-                NUM_PRECIO_OFERTA: (params.precio_oferta == 0)?produc.NUM_PRECIO_OFERTA:parseFloat(params.precio_oferta), 
-                NUM_COMISION: (params.slug == 0)?produc.NUM_COMISION:parseInt(params.comision),
-                JSON_ETIQUETAS: (params.etiquetas == null)?produc.JSON_ETIQUETAS:params.etiquetas,
-                JSON_URL_GALERIA: (params.galeria == null)?produc.JSON_URL_GALERIA:params.galeria,
-                BND_GESTIONAR_INVENTARIO: (params.inventario == 0)?produc.BND_GESTIONAR_INVENTARIO:parseInt(params.inventario),
-                BND_VENDER_INDIVIDUALMENTE: (params.vender_individualmente == 0)?produc.BND_VENDER_INDIVIDUALMENTE:parseInt(params.vender_individualmente),
-                FECHA: produc.FECHA,
-                ESTATUS:  (params.estatus == '')?produc.ESTATUS:params.estatus
+                ID_PRODUCTO: ID_PRODUCTO,
+                ID_USUARIO:ID_USUARIO,
+                ID_PEDIDO: ID_PEDIDO,
+                NUM_TIPO_FRECUENCIA_PAGO:(params.NUM_TIPO_FRECUENCIA_PAGO == '')?produc.NUM_TIPO_FRECUENCIA_PAGO:params.NUM_TIPO_FRECUENCIA_PAGO,
+                NUM_FRECUENCIA_PAGO:(params.NUM_FRECUENCIA_PAGO == '')?produc.NUM_FRECUENCIA_PAGO:params.NUM_FRECUENCIA_PAGO, 
+                JSON_FRECUENCIA_PAGO: (params.JSON_FRECUENCIA_PAGO == '')?produc.JSON_FRECUENCIA_PAGO:params.JSON_FRECUENCIA_PAGO,
+                FECHA_INICIO:(params.FECHA_INICIO == '')?produc.FECHA_INICIO:params.FECHA_INICIO, 
+                FECHA_FIN: (params.FECHA_FIN == '')?produc.FECHA_FIN:params.FECHA_FIN,
+                FECHA_SIGUIENTE_PAGO: (params.FECHA_SIGUIENTE_PAGO == 0)?produc.FECHA_SIGUIENTE_PAGO:parseInt(params.FECHA_SIGUIENTE_PAGO),
+                ESTATUS:  (params.ESTATUS == '')?produc.ESTATUS:params.ESTATUS
             }
 
-            consulta.funciones.update(PRODUCTOS.TABLA, data);
+            try{
+                await pool.query(consulta.custom(`UPDATE suscripciones
+                SET ID_PRODUCTO=${ID_PRODUCTO}, ID_USUARIO='${ID_USUARIO}, ID_PEDIDO=${ID_PEDIDO}, 
+                NUM_TIPO_FRECUENCIA_PAGO = ${data.NUM_TIPO_FRECUENCIA_PAGO}, NUM_FRECUENCIA_PAGO = ${data.NUM_FRECUENCIA_PAGO}, JSON_FRECUENCIA_PAGO = ${data.JSON_FRECUENCIA_PAGO},
+                FECHA_INICIO = ${data.FECHA_INICIO}, FECHA_FIN = ${data.FECHA_FIN}, FECHA_SIGUIENTE_PAGO = ${data.FECHA_SIGUIENTE_PAGO}, ESTATUS= ${data.ESTATUS}
+                WHERE ID_USUARIO = ${ID_USUARIO} AND ID_PRODUCTO = ${ID_PRODUCTO} AND ID_PEDIDO = ${ID_PEDIDO}`));
 
+            }catch(e){
+                return res.status(400).send({
+                    'message': 'Error al insertar'
+                }); 
+            }
+           
             return res.status(200).send({
                 'message': 'Producto actualizado con exito',
                 'producto': data
@@ -161,7 +163,21 @@ const productos = {
                 'message': 'Datos incorrecto, intentelo de nuevo'
             });
         }
-    },*/
+    },
+
+    delete:async function(req, res) {
+
+        const ID_USUARIO = req.params.ID_USUARIO
+        const ID_PRODUCTO = req.params.ID_PRODUCTO
+        const ID_PEDIDO = req.params.ID_PEDIDO
+        
+        const borrar = await pool.query(consulta.custom(`DELETE FROM suscripciones WHERE ID_USUARIO = ${ID_USUARIO} 
+        AND ID_PRODUCTO = ${ID_PRODUCTO} AND ID_PEDIDO = ${ID_PEDIDO}`));
+        return res.status(200).send({
+            'message': 'Cupón eliminado exitosamente',
+         
+        });
+    }
 
     
 }

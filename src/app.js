@@ -71,16 +71,6 @@ app.use('/api', uso_cupones_routes);
 app.use('/api', uso_reglas_descuentos_routes);
 app.use('/api', conteo_fidelizacion_routes);
 
-
-
-
-
-
-
-
-
-
-
 //Corriendo servidor
 app.listen(config.PORT, () => {
     console.log('Servidor corriendo exitosamente'+ config.PORT);

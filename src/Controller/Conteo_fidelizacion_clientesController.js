@@ -123,7 +123,7 @@ const cupones = {
 
             try{
                 await pool.query(consulta.custom(`UPDATE conteo_fidelizacion_clientes
-                SET ID_USUARIO=${data.ID_USUARIO}, DES_ID_NAVEGADOR='${DES_ID_NAVEGADOR}, ID_TOKEN_URL=${data.ID_TOKEN_URL}, ESTATUS = ${data.ESTATUS}
+                SET ID_USUARIO=${data.ID_USUARIO}, DES_ID_NAVEGADOR='${data.DES_ID_NAVEGADOR}, ID_TOKEN_URL=${data.ID_TOKEN_URL}, ESTATUS = ${data.ESTATUS}
                 WHERE ID_FIDELIZACION_CLIENTE = ${ID_FIDELIZACION_CLIENTE} AND ID_REGISTRO_FIDELIZACION_CLIENTE = ${ID_REGISTRO_FIDELIZACION_CLIENTE}`));
 
             }catch(e){
