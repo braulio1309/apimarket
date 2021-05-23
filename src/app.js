@@ -4,10 +4,40 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pool = require('../database');
 const config = require('./database/config');
+const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy
+const dotenv = require("dotenv");
+dotenv.config();
 
 
 //Ejecutar express
 const app = express();
+
+app.use(passport.initialize());
+app.use(passport.session())
+
+//FACEBOOK LOGIN
+ 
+passport.use(
+    new FacebookStrategy(
+      {
+        clientID: process.env.FACEBOOK_CLIENT_ID,
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+        profileFields: ["email", "name"]
+      },
+      function(accessToken, refreshToken, profile, done) {
+        const { email, first_name, last_name } = profile._json;
+        const userData = {
+          email,
+          firstName: first_name,
+          lastName: last_name
+        };
+        //new userModel(userData).save();
+        done(null, profile);
+      }
+    )
+)
 
 //Cargar archivos de rutas
 const usuario_routes                = require('./routes/usuario');
@@ -45,7 +75,7 @@ app.use(bodyParser.json());
 
 
 //Reescribir rutas
-app.use('/api', usuario_routes);
+app.use('', usuario_routes);
 app.use('/api', roles_routes);
 app.use('/api', metaUsuarios_routes);
 app.use('/api', metaRoles_routes);
@@ -72,8 +102,9 @@ app.use('/api', uso_reglas_descuentos_routes);
 app.use('/api', conteo_fidelizacion_routes);
 
 //Corriendo servidor
-app.listen(config.PORT, () => {
-    console.log('Servidor corriendo exitosamente'+ config.PORT);
+console.log(process.env.PORT)
+app.listen(process.env.PORT, () => {
+    console.log('Servidor corriendo exitosamente'+ process.env.PORT);
 })
 
 //Exportar modulo

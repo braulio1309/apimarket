@@ -1,6 +1,6 @@
 //Librerías y servicios
 const validator = require('validator');
-const ZONAS = require('../Models/Zonas');
+const ZONAS = require('../Models/Zonas_envios');
 const moment = require('moment');
 const pool = require('../../database')
 const consulta = require('../database/mysql')

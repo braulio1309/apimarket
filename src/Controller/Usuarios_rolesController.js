@@ -1,6 +1,6 @@
 //Librerías y servicios
 const validator = require('validator');
-const USUARIOS_ROLES = require('../Models/Usuarios_ID_ROLes');
+const USUARIOS_ROLES = require('../Models/Usuarios_RoLes');
 const USUARIOS = require('../Models/User');
 const ROLES = require('../Models/Roles');
 const moment = require('moment');

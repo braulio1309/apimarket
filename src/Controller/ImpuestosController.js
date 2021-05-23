@@ -77,7 +77,7 @@ const meta = {
         //Validar datos
         let id = req.params.id //ID por parametros
         
-        let params = req.body;
+       
         //Validar datos
         params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_META_KEY;
         params.NUM_VALOR   = (params.NUM_VALOR == undefined)?0:params.DES_META_VALUE;

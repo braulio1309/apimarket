@@ -6,10 +6,19 @@ const jwt = require('../services/jwt');
 const moment = require('moment');
 const pool = require('../../database')
 const consulta = require('../database/mysql')
+const passport = require('passport')
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+const dotenv = require("dotenv");
+dotenv.config();
+
+
+
+
 const date = new Date();
 
 
-let DES_USUARIO = {
+const usuario = {
 
     crear:async function(req, res) {
        
@@ -254,8 +263,35 @@ let DES_USUARIO = {
                 'message': 'El DES_USUARIO no tiene permiso para realizar esta acción'
             });
         }
+    },
+
+    login_fb:async function(req, res){
+        // Passport session setup.
+        
+        console.log(process.env.FACEBOOK_CLIENT_ID)
+        passport.use(
+            new FacebookStrategy(
+              {
+                clientID: process.env.FACEBOOK_CLIENT_ID,
+                clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+                callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+                profileFields: ["email", "name"]
+              },
+              function(accessToken, refreshToken, profile, done) {
+                const { email, first_name, last_name } = profile._json;
+                const userData = {
+                  email,
+                  firstName: first_name,
+                  lastName: last_name
+                };
+                //new userModel(userData).save();
+                done(null, profile);
+              }
+            )
+        )
+
     }
 
 }
 
-module.exports = DES_USUARIO;
+module.exports = usuario;

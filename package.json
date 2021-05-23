@@ -2,6 +2,10 @@
   "name": "apimarket",
   "version": "1.0.0",
   "description": "API marketplace, fecha inicio: 15-04-2021",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/cheeseokay1/backend/cheeseokay-marketplace-backend"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js"
@@ -14,16 +18,16 @@
     "connect-multiparty": "^2.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-mysql-session": "^2.1.5",
+    "express-mysql-session": "^2.1.6",
     "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
     "jwt-simple": "^0.5.6",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "mysql-paginator": "0.0.2",
     "mysql2": "^2.2.5",
     "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {

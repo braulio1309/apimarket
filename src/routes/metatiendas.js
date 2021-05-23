@@ -1,5 +1,5 @@
 const express = require('express');
-const MetatiendaController = require('../Controller/MetatiendaController');
+const MetatiendaController = require('../Controller/MetatiendasController');
 const md_auth = require('../middlewares/authenticated');
 const router = express.Router();
 

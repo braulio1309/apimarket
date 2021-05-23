@@ -8,4 +8,4 @@ const MetaTienda = {
     ESTATUS:'ESTATUS'
 }
 
-module.exports = MetaRoles;
+module.exports = MetaTienda;
