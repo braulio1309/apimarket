@@ -32,6 +32,7 @@ const cupones_routes      = require('./routes/cupones');
 const fidelizacion_clientes_routes      = require('./routes/fidelizacion_clientes');
 const uso_cupones_routes      = require('./routes/uso_cupones_usuarios');
 const uso_reglas_descuentos_routes      = require('./routes/uso_cupones_usuarios');
+const conteo_fidelizacion_routes      = require('./routes/conteo_fidelizacion_clientes');
 
 
 
@@ -68,6 +69,8 @@ app.use('/api', cupones_routes);
 app.use('/api', fidelizacion_clientes_routes);
 app.use('/api', uso_cupones_routes);
 app.use('/api', uso_reglas_descuentos_routes);
+app.use('/api', conteo_fidelizacion_routes);
+
 
 
 
