@@ -64,6 +64,8 @@ const uso_cupones_routes      = require('./routes/uso_cupones_usuarios');
 const uso_reglas_descuentos_routes      = require('./routes/uso_cupones_usuarios');
 const conteo_fidelizacion_routes      = require('./routes/conteo_fidelizacion_clientes');
 const meta_variables_routes      = require('./routes/metavariables');
+const archivos_routes      = require('./routes/archivos');
+
 
 //Middlewares
 app.use(express.urlencoded({extended:false}));
@@ -97,6 +99,7 @@ app.use('/api', uso_cupones_routes);
 app.use('/api', uso_reglas_descuentos_routes);
 app.use('/api', conteo_fidelizacion_routes);
 app.use('/api', meta_variables_routes);
+app.use('/api', archivos_routes);
 
 //Corriendo servidor
 console.log(process.env.PORT)

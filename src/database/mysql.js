@@ -4,6 +4,8 @@ const COL_PASS_USUARIO = 'DES_PASS';
 const COL_TELEFONO_USUARIO = 'TELEFONO';
 const COL_ESTATUS = 'ESTATUS';
 const mysql= require('mysql2');
+const paginate    = require('node-mysql-paginate');
+
 
 //const pool = require('../../database')
 const pool=mysql.createPool({
@@ -57,6 +59,7 @@ const search = (table, columName, value, comparator) => {
 };
  
 const funciones = {
+
   insertTable: async function insertTable(tableName,params) {
             
     return await promisePool.query(
@@ -68,7 +71,37 @@ const funciones = {
    update:async function update(table, data) {
     let consulta=`UPDATE ${table} SET ? WHERE id=?`;
     return await promisePool.query(consulta,[data, data.ID]);
+  },
+
+  paginated_query: async function paginated_query(req, res, query, params){
+    let limit = 10;
+    if(req.params.limit){
+      limit = req.params.limit;
+    }
+    
+    let page = 1;
+    if(req.params.page){
+      page = req.params.page;
+    }
+    
+     paginate.paginate(pool, query,
+      {
+        page: page,
+        limit: limit,
+        params: params
+      },
+      function (err, rows) {
+        if (err) {
+          console.log("An unexpectede error happens.");
+          return;
+        }
+        
+        return res.json(rows);
+      }
+    );
   }
+
+
 };
 
 

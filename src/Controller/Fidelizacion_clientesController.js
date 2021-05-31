@@ -71,10 +71,10 @@ const fidelizacion = {
     },
 
     mostrar:async function(req, res){
-        const lista = await pool.query(consulta.list(FIDELIZACION.TABLA));
-        return res.status(400).send({
-            'lista': lista
-        });
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM fidelizacion_clientes', null)
+        
+
+         return user
     },
 
     update:async function(req, res){

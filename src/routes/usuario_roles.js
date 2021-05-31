@@ -5,7 +5,7 @@ const router = express.Router();
 
 //Usuario_roless
 router.post('/usuariosroles/registro',      md_auth.authenticated, Usuarios_rolesController.crear);
-router.get('/usuariosroles/mostrar',        md_auth.authenticated, Usuarios_rolesController.mostrar);
+router.get('/usuariosroles/mostrar/:page?/:limit?',        md_auth.authenticated, Usuarios_rolesController.mostrar);
 router.put('/usuariosroles/actualizar/:id_usuario/:id_rol', md_auth.authenticated, Usuarios_rolesController.update);
 router.delete('/usuariosroles/eliminar/:id_usuario/:id_rol',md_auth.authenticated, Usuarios_rolesController.delete);
 

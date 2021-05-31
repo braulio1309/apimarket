@@ -70,11 +70,10 @@ const categorias = {
     },
 
     mostrar:async function(req, res){
-        const lista = await pool.query(consulta.list(CATEGORIAS_PRODUCTOS.TABLA));
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM categorias', null)
+        
 
-        return res.status(400).send({
-            'lista': lista
-        });
+         return user
     },
 
     update:async function(req, res){

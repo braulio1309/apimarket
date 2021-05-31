@@ -5,7 +5,7 @@ const router = express.Router();
 
 //Pedidosproductoss
 router.post('/pedidosproductos/registro/:idtienda/:idpedido',      md_auth.authenticated, PedidosproductosController.crear);
-router.get('/pedidosproductos/mostrar',        md_auth.authenticated, PedidosproductosController.mostrar);
+router.get('/pedidosproductos/mostrar/:page?/:limit?',        md_auth.authenticated, PedidosproductosController.mostrar);
 router.put('/pedidosproductos/actualizar/:id', md_auth.authenticated, PedidosproductosController.update);
 router.delete('/pedidosproductos/eliminar/:id',md_auth.authenticated, PedidosproductosController.delete);
 

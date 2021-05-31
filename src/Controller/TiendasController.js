@@ -78,11 +78,11 @@ const tiendas = {
     },
 
     mostrar:async function(req, res){
-        const lista = await pool.query(consulta.list(TIENDAS.TABLA));
+         //let user =  await pool.query(consulta.list('DES_USUARIOs'))
+         let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM tiendas', null)
+        
 
-        return res.status(400).send({
-            'lista': lista
-        });
+         return user
     },
     
     update:async function(req, res) {

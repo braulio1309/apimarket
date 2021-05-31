@@ -5,7 +5,7 @@ const router = express.Router();
 
 //zonass
 router.post('/zonas/registro',      md_auth.authenticated, ZonasController.crear);
-router.get('/zonas/mostrar',        md_auth.authenticated, ZonasController.mostrar);
+router.get('/zonas/mostrar/:page?/:limit?',        md_auth.authenticated, ZonasController.mostrar);
 router.put('/zonas/actualizar/:id', md_auth.authenticated, ZonasController.update);
 router.delete('/zonas/eliminar/:id',md_auth.authenticated, ZonasController.delete);
 

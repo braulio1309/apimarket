@@ -5,7 +5,7 @@ const router = express.Router();
 
 //Pedidoss
 router.post('/pedidos/registro',      md_auth.authenticated, PedidosController.crear);
-router.get('/pedidos/mostrar',        md_auth.authenticated, PedidosController.mostrar);
+router.get('/pedidos/mostrar/:page?/:limit?',        md_auth.authenticated, PedidosController.mostrar);
 router.put('/pedidos/actualizar/:id', md_auth.authenticated, PedidosController.update);
 router.delete('/pedidos/eliminar/:id',md_auth.authenticated, PedidosController.delete);
 

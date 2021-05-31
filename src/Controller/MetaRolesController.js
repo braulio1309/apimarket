@@ -78,10 +78,10 @@ let metaroles = {
 
     mostrar: async function(req, res){
        
-        let meta =  await pool.query(consulta.list(METAROLES.TABLA))
-        return res.status(200).send({
-            'lista': meta
-        })
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM meta_roles', null)
+        
+
+        return user
         
     },
 

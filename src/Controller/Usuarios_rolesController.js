@@ -72,10 +72,11 @@ const ID_USUARIOs_ID_ROLes = {
     },
 
     mostrar: async function(req, res){
-        const lista = await pool.query(consulta.list(USUARIOS_ROLES.TABLA));
-        return res.status(200).send({
-            'lista': lista
-        })
+        //let user =  await pool.query(consulta.list('DES_USUARIOs'))
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM usuarios_roles', null)
+        
+
+        return user
     },
 
     update:async function(req, res){

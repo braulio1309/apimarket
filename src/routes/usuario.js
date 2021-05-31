@@ -16,7 +16,7 @@ passport.deserializeUser(function(obj, done) {
 //Usuarios
 router.post('/user/registro',    UsuarioController.crear);
 router.post('/login',       UsuarioController.login);
-router.get('/user/mostrar',     UsuarioController.mostrar);
+router.get('/user/mostrar/:page?/:limit?',     UsuarioController.mostrar);
 router.put('/user/actualizar/:id', md_auth.authenticated,  UsuarioController.update);
 router.delete('/user/eliminar/:id', md_auth.authenticated,  UsuarioController.delete);
 

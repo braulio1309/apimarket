@@ -62,10 +62,11 @@ let roles = {
 
     mostrar: async function(req, res){
        
-        let roles =  await pool.query(consulta.list(Roles.TABLA))
-        return res.status(200).send({
-            'lista': roles
-        })
+        //let user =  await pool.query(consulta.list('DES_USUARIOs'))
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM roles', null)
+        
+
+        return user
         
     },
 

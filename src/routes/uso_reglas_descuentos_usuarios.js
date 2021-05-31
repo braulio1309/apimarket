@@ -5,7 +5,7 @@ const router = express.Router();
 
 //UsoDescuentoss
 router.post('/uso-descuentos/registro',      md_auth.authenticated, UsoDescuentosController.crear);
-router.get('/uso-descuentos/mostrar',        md_auth.authenticated, UsoDescuentosController.mostrar);
+router.get('/uso-descuentos/mostrar/:page?/:limit?',        md_auth.authenticated, UsoDescuentosController.mostrar);
 router.put('/uso-descuentos/actualizar/:id', md_auth.authenticated, UsoDescuentosController.update);
 router.delete('/uso-descuentos/eliminar/:id',md_auth.authenticated, UsoDescuentosController.delete);
 

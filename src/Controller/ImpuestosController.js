@@ -63,10 +63,10 @@ const meta = {
 
     mostrar: async function(req, res){
        
-        const meta =  await pool.query(consulta.list(IMPUESTOS.TABLA))
-        return res.status(200).send({
-            'lista': meta
-        })
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM impuestos', null)
+        
+
+         return user
         
     },
 

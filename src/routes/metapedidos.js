@@ -5,7 +5,7 @@ const router = express.Router();
 
 //metapedidoss
 router.post('/metapedidos/registro',      md_auth.authenticated, MetapedidosController.crear);
-router.get('/metapedidos/mostrar',        md_auth.authenticated, MetapedidosController.mostrar);
+router.get('/metapedidos/mostrar/:page?/:limit?',        md_auth.authenticated, MetapedidosController.mostrar);
 router.put('/metapedidos/actualizar/:id', md_auth.authenticated, MetapedidosController.update);
 router.delete('/metapedidos/eliminar/:id',md_auth.authenticated, MetapedidosController.delete);
 

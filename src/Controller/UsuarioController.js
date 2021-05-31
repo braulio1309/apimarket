@@ -4,15 +4,25 @@ let Usuario = require('../Models/Usuarios');
 const bcrypt = require('bcryptjs');
 const jwt = require('../services/jwt');
 const moment = require('moment');
-const pool = require('../../database')
+//const pool = require('../../database')
 const consulta = require('../database/mysql')
 const passport = require('passport')
-var FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const paginate    = require('node-mysql-paginate');
+const mysql= require('mysql2');
 
 const dotenv = require("dotenv");
 dotenv.config();
 
-
+const pool=mysql.createPool({
+    host: 'localhost',
+    user:'root',
+    password: '',
+    database: 'cheeseok_marketplace_test'
+  })
+  
+  const promisePool = pool.promise();
+  
 
 
 const date = new Date();
@@ -88,7 +98,7 @@ const usuario = {
 
         }else{
             return res.status(400).send({
-                'message': 'Datos incorrectos, intentelo de nuevo'
+                'message': 'Datos incorrectos,  intentelo de nuevo'
             });
 
         }
@@ -96,10 +106,11 @@ const usuario = {
 
     mostrar: async function(req, res){
        
-        let user =  await pool.query(consulta.list('DES_USUARIOs'))
-        return res.status(200).send({
-            'lista': user
-        })
+        //let user =  await pool.query(consulta.list('DES_USUARIOs'))
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM usuarios', null)
+        
+
+        return user
         
     },
 

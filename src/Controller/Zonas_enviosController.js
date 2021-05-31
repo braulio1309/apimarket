@@ -64,10 +64,11 @@ const zonas = {
     },
 
     mostrar:async function(req, res){
-        const lista = await pool.query(consulta.list(ZONAS.TABLA));
-        return res.status(400).send({
-            'lista': lista
-        });v
+        //let user =  await pool.query(consulta.list('DES_USUARIOs'))
+        let user =  consulta.funciones.paginated_query(req, res, 'SELECT * FROM zonas_envios', null)
+        
+
+        return user
     },
 
     update:async function(req, res){
