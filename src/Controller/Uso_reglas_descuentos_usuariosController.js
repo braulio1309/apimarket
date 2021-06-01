@@ -15,10 +15,10 @@ const uso_cupones = {
 
         //Validar datos
         params.ID_REGLA_DESCUENTO       = (params.ID_REGLA_DESCUENTO == undefined)?'':params.ID_REGLA_DESCUENTO;
-        params.ID_USUARIO         = (params.ID_USUARIO == undefined)?'':params.ID_USUARIO;
+        params.ID_USUARIO         = (params.ID_USUARIO == undefined)?'':parseInt(params.ID_USUARIO);
         params.DES_IP_CLIENTE          = (params.DES_IP_CLIENTE == undefined)?'':params.DES_IP_CLIENTE;
 
-        if(params.ID_REGLA_DESCUENTO  &&  params.ID_USUARIO && params.DES_CUPON){
+        if(params.ID_REGLA_DESCUENTO  &&  params.ID_USUARIO && params.DES_IP_CLIENTE){
 
             //Valido si la regla existe
             const cupon = await pool.query(consulta.get(REGLAS.TABLA, params.ID_REGLA_DESCUENTO));
@@ -29,6 +29,7 @@ const uso_cupones = {
             }
 
             //Valido que el slug no esté tomado 
+            
             const usuario = await pool.query(consulta.get(USUARIOS.TABLA, params.ID_USUARIO));
             if(usuario.length == 0){
                 return res.status(400).send({
@@ -41,7 +42,7 @@ const uso_cupones = {
                
                 ID_USUARIO:params.ID_USUARIO,
                 DES_IP_CLIENTE:params.DES_IP_CLIENTE,
-                ID_REGLA_DESCUENTO_PRODUCTO:params.ID_REGLA_DESCUENTO_PRODUCTO,
+                ID_REGLA_DESCUENTO:params.ID_REGLA_DESCUENTO,
                 DES_IP_CLIENTE: params.DES_IP_CLIENTE,
                 FECHA: date,
                 STATUS: 1
@@ -56,7 +57,10 @@ const uso_cupones = {
                     'producto': data
                 }); 
             }
-
+            return res.status(200).send({
+                'message': 'El usuario registrado con exito',
+                'producto': data
+            }); 
             
 
 
@@ -118,7 +122,7 @@ const uso_cupones = {
                 ID_REGLA_DESCUENTO:(params.ID_REGLA_DESCUENTO == '')?produc.ID_REGLA_DESCUENTO:params.ID_REGLA_DESCUENTO,
                 DES_IP_CLIENTE: (params.DES_IP_CLIENTE == '')?produc.DES_IP_CLIENTE:params.DES_IP_CLIENTE,
                 FECHA: produc.FECHA,
-                ESTATUS:  (params.STATUS == '')?produc.STATUS:params.STATUS
+                STATUS:  (params.STATUS == '')?produc.STATUS:params.STATUS
             }
 
             try{
@@ -131,7 +135,10 @@ const uso_cupones = {
                 }); 
             }
 
-            
+            return res.status(200).send({
+                'message': 'Pedido actualizado con exito',
+                'pedido': data
+            }); 
 
 
 

@@ -60,17 +60,27 @@ const search = (table, columName, value, comparator) => {
  
 const funciones = {
 
-  insertTable: async function insertTable(tableName,params) {
-            
-    return await promisePool.query(
-      `INSERT INTO ${tableName} SET ?`,params
-    )
+  insertTable: async function insertTable(tableName,params,res) {
+    try{
+      return await promisePool.query(
+        `INSERT INTO ${tableName} SET ?`,params
+      )
+    }catch{
+      console.log('Error al insertar')
+      return 0;
+    }
+    
   
 },
   
    update:async function update(table, data) {
     let consulta=`UPDATE ${table} SET ? WHERE id=?`;
-    return await promisePool.query(consulta,[data, data.ID]);
+    try{
+      return await promisePool.query(consulta,[data, data.ID]);
+    }catch{
+      console.log('Error al insertar')
+      return 0;
+    }
   },
 
   paginated_query: async function paginated_query(req, res, query, params){

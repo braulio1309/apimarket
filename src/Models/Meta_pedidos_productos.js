@@ -1,5 +1,5 @@
 const MetaRoles = {
-    TABLA:  'meta_pedidos',
+    TABLA:  'meta_pedidos_productos',
     ID:     'ID',
     ID_PEDIDO_PRODUCTO: 'ID_PEDIDO_PRODUCTO',
     KEY:    'DES_META_KEY',

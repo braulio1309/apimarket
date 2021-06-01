@@ -61,7 +61,7 @@ const reglas_descuento_routes      = require('./routes/reglas_descuento');
 const cupones_routes      = require('./routes/cupones');
 const fidelizacion_clientes_routes      = require('./routes/fidelizacion_clientes');
 const uso_cupones_routes      = require('./routes/uso_cupones_usuarios');
-const uso_reglas_descuentos_routes      = require('./routes/uso_cupones_usuarios');
+const uso_reglas_descuentos_routes      = require('./routes/uso_reglas_descuentos_usuarios');
 const conteo_fidelizacion_routes      = require('./routes/conteo_fidelizacion_clientes');
 const meta_variables_routes      = require('./routes/metavariables');
 const archivos_routes      = require('./routes/archivos');
@@ -89,24 +89,19 @@ app.use('/api', metaPedidos_routes);
 app.use('/api', zonas_routes);
 app.use('/api', pedidos_productos_routes);
 app.use('/api', suscripciones_routes);
-
-//Sin probar
-
-app.use('/api', meta_pedidos_productos_routes);
-
 app.use('/api', reglas_descuento_routes);
 app.use('/api', cupones_routes);
-app.use('/api', fidelizacion_clientes_routes);
 app.use('/api', uso_cupones_routes);
-app.use('/api', uso_reglas_descuentos_routes);
+app.use('/api', fidelizacion_clientes_routes);
 app.use('/api', conteo_fidelizacion_routes);
+app.use('/api', uso_reglas_descuentos_routes);
+app.use('/api', meta_pedidos_productos_routes);
 app.use('/api', meta_variables_routes);
-app.use('/api', archivos_routes);
 
 //Corriendo servidor
-console.log(process.env.PORT)
+
 app.listen(process.env.PORT, () => {
-    console.log('Servidor corriendo exitosamente'+ process.env.PORT);
+    console.log('Servidor corriendo exitosamente '+ process.env.PORT);
 })
 
 //Exportar modulo

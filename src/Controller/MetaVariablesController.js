@@ -24,8 +24,8 @@ let metaroles = {
 
             //Verificamos si ya existe el metadato 
             const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAVARIABLES.TABLA} WHERE ${METAVARIABLES.ID_USUARIO_ALTA} = ${req.user.sub} 
-            AND ${METAVARIABLES.DES_META_KEY} = '${params.DES_META_KEY}' 
-            AND ${METAVARIABLES.DES_META_VALUE} = '${params.DES_META_VALUE}'`));
+            AND ${METAVARIABLES.KEY} = '${params.DES_META_KEY}' 
+            AND ${METAVARIABLES.VALUE} = '${params.DES_META_VALUE}'`));
             
             if(verifica.length > 0){
                 return res.status(400).send({
@@ -100,14 +100,14 @@ let metaroles = {
         let validate_value  = !validator.isEmpty(params.DES_META_VALUE);
        
 
-        if((validate_key || validate_value) && validate_rol_id){
+        if((validate_key || validate_value) ||  params.ESTATUS){
            
              //Valido duplicidad
             const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAVARIABLES.TABLA} WHERE ${METAVARIABLES.ID_USUARIO_ALTA} = ${req.user.sub} 
-            AND (${METAVARIABLES.DES_META_KEY} = '${params.DES_META_KEY}' 
-            AND ${METAVARIABLES.DES_META_VALUE} = '${params.DES_META_VALUE}')`));                
+            AND (${METAVARIABLES.KEY} = '${params.DES_META_KEY}' 
+            AND ${METAVARIABLES.VALUE} = '${params.DES_META_VALUE}')`));                
 
-            if(verifica.length != 0){
+            if(verifica.length > 1){
                 return res.status(400).send({
                     'message': 'El metadato ya fue creado'
                 });

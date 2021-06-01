@@ -20,7 +20,7 @@ const cupones = {
         params.BDN_ENVIO_GRATUITO   = (params.BDN_ENVIO_GRATUITO == undefined)?null:params.BDN_ENVIO_GRATUITO;
         params.NUM_GASTO_MINIMO   = (params.NUM_GASTO_MINIMO == undefined)?null:params.NUM_GASTO_MINIMO;
         params.NUM_GASTO_MAXIMO    = (params.NUM_GASTO_MAXIMO == undefined)?null:params.NUM_GASTO_MAXIMO;
-        params.BND_USO_INDIVIDUAL       = (params.BND_USO_INDIVIDUAL == undefined)?null:params.BND_USO_INDIVIDUAL;
+        params.BND_USO_INDIVIDUAL       = (params.BND_USO_INDIVIDUAL == undefined)?0:params.BND_USO_INDIVIDUAL;
         params.BND_EXCLUYE_ARTICULOS_OFERTA         = (params.BND_EXCLUYE_ARTICULOS_OFERTA == undefined)?null:params.BND_EXCLUYE_ARTICULOS_OFERTA;
         params.JSON_ID_PRODUCTOS_INCLUIDOS = (params.JSON_ID_PRODUCTOS_INCLUIDOS == undefined)?null:params.JSON_ID_PRODUCTOS_INCLUIDOS;
         params.JSON_ID_CATEGORIAS_INCLUIDAS= (params.JSON_ID_CATEGORIAS_INCLUIDAS == undefined)?null:params.JSON_ID_CATEGORIAS_INCLUIDAS;
@@ -47,27 +47,27 @@ const cupones = {
 
             //Guardar en la base de datos
             const data = {
-                ID_TIENDA: id,
+               
                 DES_DESCRIPCION:params.DES_DESCRIPCION,
                 FECHA_CADUCIDAD:params.FECHA_CADUCIDAD,
                 DES_NOMBRE:params.DES_NOMBRE,
-                BDN_ENVIO_GRATUITO:params.BDN_ENVIO_GRATUITO, 
-                NUM_GASTO_MINIMO: params.NUM_GASTO_MINIMO,
-                NUM_GASTO_MAXIMO:params.NUM_GASTO_MAXIMO, 
-                BND_USO_INDIVIDUAL: params.BND_USO_INDIVIDUAL,
-                BND_EXCLUYE_ARTICULOS_OFERTA: params.BND_EXCLUYE_ARTICULOS_OFERTA,
-                JSON_ID_PRODUCTOS_INCLUIDOS: params.JSON_ID_PRODUCTOS_INCLUIDOS,
-                JSON_ID_CATEGORIAS_INCLUIDAS: params.JSON_ID_CATEGORIAS_INCLUIDAS, 
-                NUM_IMPORTE: params.NUM_IMPORTE,
-                JSON_ETIQUETAS: params.JSON_ETIQUETAS,
+                BDN_ENVIO_GRATUITO: parseInt(params.BDN_ENVIO_GRATUITO), 
+                NUM_GASTO_MINIMO: parseFloat(params.NUM_GASTO_MINIMO),
+                NUM_GASTO_MAXIMO: parseFloat(params.NUM_GASTO_MAXIMO), 
+                BND_USO_INDIVIDUAL: parseInt(params.BND_USO_INDIVIDUAL),
+                BND_EXCLUYE_ARTICULOS_OFERTA: parseInt(params.BND_EXCLUYE_ARTICULOS_OFERTA),
+                JSON_ID_PRODUCTOS_INCLUIDOS: JSON.stringify(params.JSON_ID_PRODUCTOS_INCLUIDOS),
+                JSON_ID_CATEGORIAS_INCLUIDAS: JSON.stringify(params.JSON_ID_CATEGORIAS_INCLUIDAS), 
+                NUM_IMPORTE: parseFloat(params.NUM_IMPORTE),
                 JSON_ID_PRODUCTOS_EXCLUIDOS: params.JSON_ID_PRODUCTOS_EXCLUIDOS,
-                JSON_ID_ROLES_EXCLUIDOS: params.JSON_ID_ROLES_EXCLUIDOS,
-                NUM_LIMITE_USO_POR_CUPON: params.NUM_LIMITE_USO_POR_CUPON,
-                NUM_LIMITE_USO_POR_USUARIO: params.NUM_LIMITE_USO_POR_USUARIO,
+                JSON_ID_ROLES_EXCLUIDOS: JSON.stringify(params.JSON_ID_ROLES_EXCLUIDOS),
+                NUM_LIMITE_USO_POR_CUPON: parseInt(params.NUM_LIMITE_USO_POR_CUPON),
+                NUM_LIMITE_USO_POR_USUARIO: parseInt(params.NUM_LIMITE_USO_POR_USUARIO),
                  
                 FECHA: date,
                 ESTATUS: 1
             }
+            //console.log(data)
 
             try{
                 consulta.funciones.insertTable(CUPONES.TABLA, data);
@@ -143,8 +143,8 @@ const cupones = {
             || params.JSON_ID_PRODUCTOS_INCLUIDOS || params.JSON_ID_ROLES_EXCLUIDOS || params.JSON_ID_TIENDAS_INCLUIDAS || params.JSON_ID_USUARIOS_INCLUIDOS){
 
             //Valido si el cupon existe
-            const cupon = await pool.query(consulta.get(CUPONES.TABLA, id));
-            if(cupon.length == 0){
+            let produc = await pool.query(consulta.get(CUPONES.TABLA, id));
+            if(produc.length == 0){
                 return res.status(400).send({
                     'message': 'Tienda no existe'
                 });
@@ -166,18 +166,18 @@ const cupones = {
                 DES_DESCRIPCION:(params.DES_DESCRIPCION == '')?produc.DES_DESCRIPCION:params.DES_DESCRIPCION,
                 FECHA_CADUCIDAD:(params.FECHA_CADUCIDAD == '')?produc.DES_SKU_PRODUCTO:params.FECHA_CADUCIDAD,
                 DES_NOMBRE:(params.DES_NOMBRE == '')?produc.DES_NOMBRE:params.DES_NOMBRE,
-                BDN_ENVIO_GRATUITO:(params.BDN_ENVIO_GRATUITO == null)?produc.BDN_ENVIO_GRATUITO:params.BDN_ENVIO_GRATUITO, 
-                NUM_GASTO_MINIMO: (params.NUM_GASTO_MINIMO == null)?produc.NUM_GASTO_MINIMO:params.NUM_GASTO_MINIMO,
-                NUM_GASTO_MAXIMO:(params.NUM_GASTO_MAXIMO == null)?produc.NUM_GASTO_MAXIMO:params.NUM_GASTO_MAXIMO, 
-                BND_USO_INDIVIDUAL: (params.BND_USO_INDIVIDUAL == null)?produc.BND_USO_INDIVIDUAL:params.BND_USO_INDIVIDUAL,
-                BND_EXCLUYE_ARTICULOS_OFERTA: (params.BND_EXCLUYE_ARTICULOS_OFERTA == null)?produc.BND_EXCLUYE_ARTICULOS_OFERTA:params.BND_EXCLUYE_ARTICULOS_OFERTA,
-                JSON_ID_PRODUCTOS_INCLUIDOS: (params.JSON_ID_PRODUCTOS_INCLUIDOS == null)?produc.JSON_ID_PRODUCTOS_INCLUIDOS:params.JSON_ID_PRODUCTOS_INCLUIDOS,
-                JSON_ID_CATEGORIAS_INCLUIDAS: (params.JSON_ID_CATEGORIAS_INCLUIDAS == null)?produc.JSON_ID_CATEGORIAS_INCLUIDAS:params.JSON_ID_CATEGORIAS_INCLUIDAS, 
+                BDN_ENVIO_GRATUITO:(params.BDN_ENVIO_GRATUITO == null)?produc.BDN_ENVIO_GRATUITO:parseInt(params.BDN_ENVIO_GRATUITO), 
+                NUM_GASTO_MINIMO: (params.NUM_GASTO_MINIMO == null)?produc.NUM_GASTO_MINIMO:parseFloat(params.NUM_GASTO_MINIMO),
+                NUM_GASTO_MAXIMO:(params.NUM_GASTO_MAXIMO == null)?produc.NUM_GASTO_MAXIMO:parseFloat(params.NUM_GASTO_MAXIMO), 
+                BND_USO_INDIVIDUAL: (params.BND_USO_INDIVIDUAL == null)?produc.BND_USO_INDIVIDUAL:parseInt(params.BND_USO_INDIVIDUAL),
+                BND_EXCLUYE_ARTICULOS_OFERTA: (params.BND_EXCLUYE_ARTICULOS_OFERTA == null)?produc.BND_EXCLUYE_ARTICULOS_OFERTA:parseInt(params.BND_EXCLUYE_ARTICULOS_OFERTA),
+                JSON_ID_PRODUCTOS_INCLUIDOS: (params.JSON_ID_PRODUCTOS_INCLUIDOS == null)? produc.JSON_ID_PRODUCTOS_INCLUIDOS:JSON.stringify(params.JSON_ID_PRODUCTOS_INCLUIDOS),
+                JSON_ID_CATEGORIAS_INCLUIDAS: (params.JSON_ID_CATEGORIAS_INCLUIDAS == null)?produc.JSON_ID_CATEGORIAS_INCLUIDAS:JSON.stringify(params.JSON_ID_CATEGORIAS_INCLUIDAS), 
                 NUM_IMPORTE: (params.NUM_IMPORTE == null)?produc.NUM_IMPORTE:parseFloat(params.NUM_IMPORTE),
-                JSON_ID_PRODUCTOS_EXCLUIDOS: (params.JSON_ID_PRODUCTOS_EXCLUIDOS == null)?produc.JSON_ID_PRODUCTOS_EXCLUIDOS:params.JSON_ID_PRODUCTOS_EXCLUIDOS,
-                JSON_ID_ROLES_EXCLUIDOS: (params.JSON_ID_ROLES_EXCLUIDOS == null)?produc.JSON_ID_ROLES_EXCLUIDOS:params.JSON_ID_ROLES_EXCLUIDOS,
-                NUM_LIMITE_USO_POR_CUPON: (params.NUM_LIMITE_USO_POR_CUPON == null)?produc.NUM_LIMITE_USO_POR_CUPON:params.NUM_LIMITE_USO_POR_CUPON,
-                NUM_LIMITE_USO_POR_USUARIO: (params.NUM_LIMITE_USO_POR_USUARIO == null)?produc.NUM_LIMITE_USO_POR_USUARIO:params.NUM_LIMITE_USO_POR_USUARIO,
+                JSON_ID_PRODUCTOS_EXCLUIDOS: (params.JSON_ID_PRODUCTOS_EXCLUIDOS == null)?produc.JSON_ID_PRODUCTOS_EXCLUIDOS:JSON.stringify(params.JSON_ID_PRODUCTOS_EXCLUIDOS),
+                JSON_ID_ROLES_EXCLUIDOS: (params.JSON_ID_ROLES_EXCLUIDOS == null)?produc.JSON_ID_ROLES_EXCLUIDOS:JSON.stringify(params.JSON_ID_ROLES_EXCLUIDOS),
+                NUM_LIMITE_USO_POR_CUPON: (params.NUM_LIMITE_USO_POR_CUPON == null)?produc.NUM_LIMITE_USO_POR_CUPON:parseInt(params.NUM_LIMITE_USO_POR_CUPON),
+                NUM_LIMITE_USO_POR_USUARIO: (params.NUM_LIMITE_USO_POR_USUARIO == null)?produc.NUM_LIMITE_USO_POR_USUARIO:parseInt(params.NUM_LIMITE_USO_POR_USUARIO),
                 FECHA: produc.FECHA,
                 ESTATUS:  (params.ESTATUS == '')?produc.ESTATUS:params.ESTATUS
             }

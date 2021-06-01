@@ -30,7 +30,7 @@ const uso_cupones = {
             }
 
             //Valido que el slug no esté tomado 
-            const usuario = await pool.query(consulta.get(USUARIO.TABLA, PRODUCTOS.ID_USUARIO));
+            const usuario = await pool.query(consulta.get(USUARIOS.TABLA, params.ID_USUARIO));
             if(usuario.length == 0){
                 return res.status(400).send({
                     'message': 'El usuario no existe'
@@ -42,7 +42,7 @@ const uso_cupones = {
                
                 ID_USUARIO:params.ID_USUARIO,
                 DES_IP_CLIENTE:params.DES_IP_CLIENTE,
-                ID_CUPON_PRODUCTO:params.ID_CUPON_PRODUCTO,
+                ID_CUPON:params.ID_CUPON,
                 
                 DES_CUPON: params.DES_CUPON,
                 DES_IP_CLIENTE: params.DES_IP_CLIENTE,
@@ -60,7 +60,10 @@ const uso_cupones = {
                 }); 
             }
 
-            
+            return res.status(200).send({
+                'message': 'El usuario registrado con exito',
+                'producto': data
+            }); 
 
 
 
@@ -123,7 +126,7 @@ const uso_cupones = {
                 DES_CUPON: (params.DES_CUPON == '')?produc.DES_CUPON:params.DES_CUPON,
                 DES_IP_CLIENTE: (params.DES_IP_CLIENTE == '')?produc.DES_IP_CLIENTE:params.DES_IP_CLIENTE,
                 FECHA: produc.FECHA,
-                ESTATUS:  (params.STATUS == '')?produc.STATUS:params.STATUS
+                STATUS:  (params.STATUS == '')?produc.STATUS:params.STATUS
             }
 
             try{
@@ -136,7 +139,10 @@ const uso_cupones = {
                 }); 
             }
 
-            
+            return res.status(200).send({
+                'message': 'Pedido actualizado con exito',
+                'pedido': data
+            });
 
 
 

@@ -35,9 +35,9 @@ const meta = {
             }
 
             //Verificamos si ya existe el metadato 
-            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAPEDIDOS.TABLA} WHERE ${METAPEDIDOS.ID_PEDIDO_PRODUCTO} = ${params.ID_PEDIDO_PRODUCTO} 
-            AND ${METAPEDIDOS.DES_META_KEY} = '${params.DES_META_KEY}' 
-            AND ${METAPEDIDOS.DES_META_VALUE} = '${params.DES_META_VALUE}'`));
+            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAPEDIDOS.TABLA} WHERE ${METAPEDIDOS.ID_PEDIDO_PRODUCTO} = '${params.ID_PEDIDO_PRODUCTO}' 
+            AND ${METAPEDIDOS.KEY} = '${params.DES_META_KEY}' 
+            AND ${METAPEDIDOS.VALUE} = '${params.DES_META_VALUE}'`));
             
             if(verifica.length > 0){
                 return res.status(400).send({
@@ -48,8 +48,8 @@ const meta = {
                 //Guardo en la base de datos
                 const data = {
                     ID_PEDIDO_PRODUCTO: params.ID_PEDIDO_PRODUCTO,
-                    DES_META_DES_META_KEY:params.DES_META_KEY,
-                    DES_META_DES_META_VALUE:params.DES_META_VALUE,
+                    DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:params.DES_META_VALUE,
                     FECHA: date,
                     ESTATUS: 1
                 }
@@ -116,8 +116,8 @@ const meta = {
            
              //Valido duplicidad
             const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METAPEDIDOS.TABLA} WHERE ${METAPEDIDOS.ID_PEDIDO_PRODUCTO} = ${params.ID_PEDIDO_PRODUCTO} 
-            AND (${METAPEDIDOS.DES_META_KEY} = '${params.DES_META_KEY}' 
-            AND ${METAPEDIDOS.DES_META_VALUE} = '${params.DES_META_VALUE}')`));                
+            AND (${METAPEDIDOS.KEY} = '${params.DES_META_KEY}' 
+            AND ${METAPEDIDOS.VALUE} = '${params.DES_META_VALUE}')`));                
 
             if(verifica.length != 0){
                 return res.status(400).send({
@@ -139,10 +139,10 @@ const meta = {
 
                 let data = {
                     ID: id,
-                    ID_pedido: meta.ID_PEDIDO_PRODUCTO,
-                    DES_META_DES_META_KEY:(params.DES_META_KEY == '')?meta.DES_META_DES_META_KEY:params.DES_META_KEY,
-                    DES_META_DES_META_VALUE:(params.DES_META_VALUE == '')?meta.DES_META_DES_META_VALUE:params.DES_META_VALUE,
-                    ESTATUS: (params.estatus == '')?meta.ESTATUS:params.ESTATUS,
+                    ID_PEDIDO_PRODUCTO: meta.ID_PEDIDO_PRODUCTO,
+                    DES_META_KEY:(params.DES_META_KEY == '')?meta.DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:(params.DES_META_VALUE == '')?meta.DES_META_VALUE:params.DES_META_VALUE,
+                    ESTATUS: (params.ESTATUS == '')?meta.ESTATUS:params.ESTATUS,
                     FECHA: meta.FECHA
                 }
 

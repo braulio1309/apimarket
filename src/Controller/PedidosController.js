@@ -31,7 +31,7 @@ const pedidos = {
         }
 
         try{
-            consulta.funciones.insertTable(PEDIDOS.TABLA, data);
+            consulta.funciones.insertTable(PEDIDOS.TABLA, data, res);
 
         }catch(e){
             return res.status(400).send({

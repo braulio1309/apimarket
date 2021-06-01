@@ -1,5 +1,5 @@
 const fidelizacion = {
-    TABLA: 'fidelizacion:_clientes',
+    TABLA: 'fidelizacion_clientes',
     ID: 'ID',
     DES_NOMBRE: 'DES_NOMBRE',
     NUM_TIPO_FIDELIZACION: 'NUM_TIPO_FIDELIZACION',

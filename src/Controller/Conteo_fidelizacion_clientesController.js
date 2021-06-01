@@ -2,6 +2,8 @@
 const validator = require('validator');
 const CONTEO = require('../Models/Conteo_fidelizacion_clientes');
 const FIDELIZACION = require('../Models/Fidelizacion_clientes');
+const USUARIOS = require('../Models/User');
+
 const moment = require('moment');
 const pool = require('../../database')
 const consulta = require('../database/mysql')
@@ -35,7 +37,7 @@ const cupones = {
             }
 
              //Valido que el usuario exista
-             const fide = await pool.query(consulta.get(FIDELIZACION.TABLA, params.ID_FIDELIZACION_CLIENTE));
+             const fide = await pool.query(consulta.get(FIDELIZACION.TABLA, ID_FIDELIZACION_CLIENTE));
              if(fide.length == 0){
                  return res.status(400).send({
                      'message': 'El fide no existe'
@@ -44,17 +46,17 @@ const cupones = {
 
             //Guardar en la base de datos
             const data = {
-                ID_USUARIO:params.ID_USUARIO,
+                ID_USUARIO:req.user.sub,
                 DES_ID_NAVEGADOR:params.DES_ID_NAVEGADOR,
                 ID_TOKEN_URL:params.ID_TOKEN_URL,
-                ID_FIDELIZACION_CLIENTE: params.ID_FIDELIZACION_CLIENTE,
-                ID_REGISTRO_FIDELIZACION_CLIENTE: params.ID_REGISTRO_FIDELIZACION_CLIENTE,
+                ID_FIDELIZACION_CLIENTE: ID_FIDELIZACION_CLIENTE,
+                ID_REGISTRO_FIDELIZACION_CLIENTE: ID_REGISTRO_FIDELIZACION_CLIENTE,
                 FECHA: date,
                 ESTATUS: 1
             }
 
             try{
-                consulta.funciones.insertTable(CUPONES.TABLA, data);
+                consulta.funciones.insertTable(CONTEO.TABLA, data);
 
             }catch(e){
                 return res.status(400).send({
@@ -110,9 +112,9 @@ const cupones = {
         if(params.ID_TOKEN_URL || params.ID_USUARIO || params.DES_IP  || params.DES_IP || params.DES_ID_NAVEGADOR || params.DES_ID_NAVEGADOR ||params.ESTATUS){
 
             //Valido si el cupon existe
-            const cupon = await pool.query(consulta.custom(`SELECT * FROM conteo_fidelizacion_clientes WHERE ID_FIDELIZACION_CLIENTE = ${ID_FIDELIZACION_CLIENTE} AND ID_REGISTRO_FIDELIZACION_CLIENTE = ${ID_REGISTRO_FIDELIZACION_CLIENTE}`));
+            let produc = await pool.query(consulta.custom(`SELECT * FROM conteo_fidelizacion_clientes WHERE ID_FIDELIZACION_CLIENTE = ${ID_FIDELIZACION_CLIENTE} AND ID_REGISTRO_FIDELIZACION_CLIENTE = ${ID_REGISTRO_FIDELIZACION_CLIENTE}`));
 
-            if(cupon.length == 0){
+            if(produc.length == 0){
                 return res.status(400).send({
                     'message': 'registro no existe'
                 });
@@ -121,7 +123,7 @@ const cupones = {
             produc = produc[0]
             //Guardar en la base de datos
             const data = {
-                ID: id,
+               
                 ID_USUARIO:(params.ID_USUARIO == '')?produc.ID_USUARIO:params.ID_USUARIO,
                 DES_ID_NAVEGADOR:(params.DES_ID_NAVEGADOR == '')?produc.DES_SKU_PRODUCTO:params.DES_ID_NAVEGADOR,
                 ID_TOKEN_URL:(params.ID_TOKEN_URL == '')?produc.ID_TOKEN_URL:params.ID_TOKEN_URL,
@@ -132,8 +134,9 @@ const cupones = {
             }
 
             try{
+               
                 await pool.query(consulta.custom(`UPDATE conteo_fidelizacion_clientes
-                SET ID_USUARIO=${data.ID_USUARIO}, DES_ID_NAVEGADOR='${data.DES_ID_NAVEGADOR}, ID_TOKEN_URL=${data.ID_TOKEN_URL}, ESTATUS = ${data.ESTATUS}
+                SET ID_USUARIO=${data.ID_USUARIO}, DES_ID_NAVEGADOR='${data.DES_ID_NAVEGADOR}', ID_TOKEN_URL=${data.ID_TOKEN_URL}, ESTATUS = ${data.ESTATUS}
                 WHERE ID_FIDELIZACION_CLIENTE = ${ID_FIDELIZACION_CLIENTE} AND ID_REGISTRO_FIDELIZACION_CLIENTE = ${ID_REGISTRO_FIDELIZACION_CLIENTE}`));
 
             }catch(e){

@@ -25,6 +25,7 @@ const fidelizacion = {
 
         if(validate_nombre && validate_slug){
 
+            console.log(consulta.search(FIDELIZACION.TABLA, FIDELIZACION.DES_NOMBRE, params.DES_NOMBRE, 'equals' ))
 
             //Valido que el nombre no esté tomado 
             const nombre = await pool.query(consulta.search(FIDELIZACION.TABLA, FIDELIZACION.DES_NOMBRE, params.DES_NOMBRE, 'equals' ));
@@ -36,17 +37,16 @@ const fidelizacion = {
 
             //Guardar en la base de datos
             const data = {
-                NUM_TIPO_FIDELIZACION:params.NUM_TIPO_FIDELIZACION,
-                NUM_MAX_REGISTROS:params.NUM_MAX_REGISTROS,
+                NUM_TIPO_FIDELIZACION:parseInt(params.NUM_TIPO_FIDELIZACION),
+                NUM_MAX_REGISTROS:parseInt(params.NUM_MAX_REGISTROS),
                 DES_NOMBRE:params.DES_NOMBRE,
                 FECHA_INICIO:params.FECHA_INICIO, 
                 FECHA_FIN: params.FECHA_FIN,
-                NUM_IMPORTE: params.NUM_IMPORTE,
-                ID_USUARIO_ALTA: params.ID_USUARIO_ALTA,
+                NUM_IMPORTE: parseFloat(params.NUM_IMPORTE),
+                ID_USUARIO_ALTA: req.user.sub,
                 FECHA: date,
                 ESTATUS: 1
             }
-
             try{
                 consulta.funciones.insertTable(FIDELIZACION.TABLA, data);
 
@@ -108,15 +108,15 @@ const fidelizacion = {
         if(validate_nombre || validate_slug || validate_estatus || params.NUM_IMPORTE || params.NUM_MAX_REGISTROS || params.FECHA_INICIO || params.FECHA_FIN){
 
             //Valido si el fide existe
-            const fide = await pool.query(consulta.get(FIDELIZACION.TABLA, id));
-            if(fide.length == 0){
+            let produc = await pool.query(consulta.get(FIDELIZACION.TABLA, id));
+            if(produc.length == 0){
                 return res.status(400).send({
                     'message': 'Tienda no existe'
                 });
             }
 
             //Valido que el NUM_TIPO_FIDELIZACION no esté tomado 
-            const nombre = await pool.query(consulta.search(FIDELIZACION.TABLA, FIDELIZACION.NUM_TIPO_FIDELIZACION, params.DES_NOMBRE, 'equals' ));
+            const nombre = await pool.query(consulta.search(FIDELIZACION.TABLA, FIDELIZACION.DES_NOMBRE, params.DES_NOMBRE, 'equals' ));
             if(nombre.length > 1){
                 return res.status(400).send({
                     'message': 'El nombre ya fue tomado '

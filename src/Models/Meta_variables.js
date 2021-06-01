@@ -1,5 +1,5 @@
 const MetaVariables = {
-    TABLA:  'meta_tiendas',
+    TABLA:  'meta_variables_sistema',
     ID:     'ID',
     ID_USUARIO_ALTA: 'ID_USUARIO_ALTA',
     KEY:    'DES_META_KEY',
