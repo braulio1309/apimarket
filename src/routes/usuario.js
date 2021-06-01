@@ -19,6 +19,8 @@ router.post('/login',       UsuarioController.login);
 router.get('/user/mostrar/:page?/:limit?',     UsuarioController.mostrar);
 router.put('/user/actualizar/:id', md_auth.authenticated,  UsuarioController.update);
 router.delete('/user/eliminar/:id', md_auth.authenticated,  UsuarioController.delete);
+router.post('/user/listar/:page?/:limit?',     UsuarioController.listar);
+
 
 router.get("/auth/facebook", passport.authenticate("facebook"));
 router.get("/auth/facebook/callback", passport.authenticate("facebook", {

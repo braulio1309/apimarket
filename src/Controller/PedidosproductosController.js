@@ -17,7 +17,7 @@ const pedidos = {
         const idpedido = req.params.idpedido;
 
         //Validar datos
-        params.DES_NOMBRE       = (params.DES_NOMBRE == undefined)?'':params.DES_NOMBRE;
+        params.DES_NOMBRE_PRODUCTO       = (params.DES_NOMBRE_PRODUCTO == undefined)?'':params.DES_NOMBRE_PRODUCTO;
         params.DES_SLUG_PRODUCTO         = (params.DES_SLUG_PRODUCTO == undefined)?'':params.DES_SLUG_PRODUCTO;
         params.DES_URL_IMAGEN     = (params.DES_URL_IMAGEN == undefined)?'':params.DES_URL_IMAGEN;
         params.DES_SKU          = (params.DES_SKU == undefined)?'':params.DES_SKU;
@@ -35,16 +35,9 @@ const pedidos = {
         params.JSON_CATEGORIAS      = (params.JSON_CATEGORIAS == undefined)?null:params.JSON_CATEGORIAS;
         params.JSON_IMPUESTOS   = (params.JSON_IMPUESTOS == undefined)?0:params.JSON_IMPUESTOS;
 
-        let validate_nombre   = !validator.isEmpty(params.DES_NOMBRE);
+        let validate_nombre   = !validator.isEmpty(params.DES_NOMBRE_PRODUCTO);
         let validate_slug  = !validator.isEmpty(params.DES_SLUG_PRODUCTO);
-        let validate_comision  = !validator.isEmpty(params.NUM_COMISION);
-        let validate_sku   = !validator.isEmpty(params.DES_SKU);
-        let validate_descripcion_corta  = !validator.isEmpty(params.DES_DESCRIPCION_CORTA);
-        let validate_descripcion_larga  = !validator.isEmpty(params.DES_DESCRIPCION_LARGA);
-        let validate_descargar   = !validator.isEmpty(params.DES_URL_IMAGEN);
-        let validate_imagen   = !validator.isEmpty(params.DES_URL_IMAGEN);
        
-
         if(validate_nombre && validate_slug){
 
             //Valido si la tienda existe
@@ -71,16 +64,16 @@ const pedidos = {
                 DES_SKU:params.DES_SKU,
                 DES_NOMBRE_PRODUCTO:params.DES_NOMBRE_PRODUCTO,
                 DES_DESCRIPCION_CORTA:params.DES_DESCRIPCION_CORTA, 
-                DES_DESCRIPCION_LARGA: params.DES_DESCRIPCION_LARGA,
+                //DES_DESCRIPCION_LARGA: params.DES_DESCRIPCION_LARGA,
                 DES_URL_DESCARGAR:params.DES_URL_DESCARGAR, 
                 DES_URL_IMAGEN: params.DES_URL_IMAGEN,
                 NUM_TIPO_PRODUCTO: parseInt(params.NUM_TIPO_PRODUCTO),
                 NUM_PRECIO_VENTA: parseFloat(params.NUM_PRECIO_VENTA),
                 NUM_PRECIO_OFERTA: parseFloat(params.NUM_PRECIO_OFERTA), 
                 NUM_COMISION: params.NUM_COMISION,
-                JSON_ETIQUETAS: params.JSON_ETIQUETAS,
-                JSON_CATEGORIAS: params.JSON_CATEGORIAS,
-                JSON_IMPUESTOS: params.JSON_IMPUESTOS,
+                JSON_ETIQUETAS: JSON.stringify(params.JSON_ETIQUETAS),
+                JSON_CATEGORIAS: JSON.stringify(params.JSON_CATEGORIAS),
+                JSON_IMPUESTOS: JSON.stringify(params.JSON_IMPUESTOS),
                 NUM_CANTIDAD: params.NUM_CANTIDAD,
                 NUM_SUBTOTAL:params.NUM_SUBTOTAL,
                 NUM_TOTAL: params. NUM_TOTAL,
@@ -99,7 +92,10 @@ const pedidos = {
             }
 
             
-
+            return res.status(200).send({
+                'message': 'Pedido registrado con exito',
+                'producto': data
+            }); 
 
 
         }else{
@@ -117,13 +113,23 @@ const pedidos = {
          return user
     },
 
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('pedidos_productos', KEY, VALUE, COMPARATOR))
+
+        return data;
+    },
+
     update:async function(req, res){
         let params = req.body;
 
         //Validar datos
         const id = req.params.id
         //Validar datos
-        params.DES_NOMBRE       = (params.DES_NOMBRE == undefined)?'':params.DES_NOMBRE;
+        params.DES_NOMBRE_PRODUCTO       = (params.DES_NOMBRE_PRODUCTO == undefined)?'':params.DES_NOMBRE_PRODUCTO;
         params.DES_SLUG_PRODUCTO         = (params.DES_SLUG_PRODUCTO == undefined)?'':params.DES_SLUG_PRODUCTO;
         params.DES_URL_IMAGEN     = (params.DES_URL_IMAGEN == undefined)?'':params.DES_URL_IMAGEN;
         params.DES_SKU          = (params.DES_SKU == undefined)?'':params.DES_SKU;
@@ -139,7 +145,7 @@ const pedidos = {
         params.JSON_IMPUESTOS   = (params.JSON_IMPUESTOS == undefined)?0:params.JSON_IMPUESTOS;
         params.ESTATUS = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
-        let validate_nombre   = !validator.isEmpty(params.DES_NOMBRE);
+        let validate_nombre   = !validator.isEmpty(params.DES_NOMBRE_PRODUCTO);
         let validate_slug  = !validator.isEmpty(params.DES_SLUG_PRODUCTO);
         let validate_sku   = !validator.isEmpty(params.DES_SKU);
         let validate_descripcion_corta  = !validator.isEmpty(params.DES_DESCRIPCION_CORTA);
@@ -166,15 +172,16 @@ const pedidos = {
                 DES_SKU:(params.DES_SKU == '')?produc.DES_SKU_PRODUCTO:params.DES_SKU,
                 DES_NOMBRE_PRODUCTO:(params.DES_NOMBRE_PRODUCTO == '')?produc.DES_NOMBRE_PRODUCTO:params.DES_NOMBRE_PRODUCTO,
                 DES_DESCRIPCION_CORTA:(params.DES_DESCRIPCION_CORTA == '')?produc.DES_DESCRIPCION_CORTA:params.DES_DESCRIPCION_CORTA, 
-                DES_DESCRIPCION_LARGA: (params.DES_DESCRIPCION_LARGA == '')?produc.DES_DESCRIPCION_LARGA:params.DES_DESCRIPCION_LARGA,
+                //DES_DESCRIPCION_LARGA: (params.DES_DESCRIPCION_LARGA == '')?produc.DES_DESCRIPCION_LARGA:params.DES_DESCRIPCION_LARGA,
                 DES_URL_DESCARGAR:(params.DES_URL_DESCARGAR == '')?produc.DES_URL_DESCARGAR:params.DES_URL_DESCARGAR, 
                 DES_URL_IMAGEN: (params.DES_URL_IMAGEN == '')?produc.DES_URL_IMAGEN:params.DES_URL_IMAGEN,
                 NUM_TIPO_PRODUCTO: (params.NUM_TIPO_PRODUCTO == 0)?produc.NUM_TIPO_PRODUCTO:parseInt(params.NUM_TIPO_PRODUCTO),
                 NUM_PRECIO_VENTA: (params.NUM_PRECIO_VENTA == 0)?produc.NUM_PRECIO_VENTA:parseFloat(params.NUM_PRECIO_VENTA),
                 NUM_PRECIO_OFERTA: (params.NUM_PRECIO_OFERTA == 0)?produc.NUM_PRECIO_OFERTA:parseFloat(params.NUM_PRECIO_OFERTA), 
                 NUM_COMISION: (params.NUM_COMISION == 0)?produc.NUM_COMISION:parseInt(params.NUM_COMISION),
-                JSON_ETIQUETAS: (params.JSON_ETIQUETAS == null)?produc.JSON_ETIQUETAS:params.JSON_ETIQUETAS,
-                JSON_CATEGORIAS: (params.JSON_CATEGORIAS == null)?produc.JSON_CATEGORIAS:params.JSON_CATEGORIAS,
+                JSON_ETIQUETAS: (params.JSON_ETIQUETAS == null)?produc.JSON_ETIQUETAS:JSON.stringify(params.JSON_ETIQUETAS),
+                JSON_CATEGORIAS: (params.JSON_CATEGORIAS == null)?produc.JSON_CATEGORIAS:JSON.stringify(params.JSON_CATEGORIAS),
+                JSON_IMPUESTOS: (params.JSON_IMPUESTOS == null)?produc.JSON_IMPUESTOS:JSON.stringify(params.JSON_IMPUESTOS),
                 NUM_CANTIDAD:(params.NUM_CANTIDAD == 0)?produc.NUM_CANTIDAD:params.NUM_CANTIDAD,
                 NUM_SUBTOTAL:(params.NUM_SUBTOTAL == 0)?produc.NUM_SUBTOTAL:params.NUM_SUBTOTAL,
                 NUM_TOTAL: (params.NUM_TOTAL == 0)?produc.NUM_TOTAL:params.NUM_TOTAL,
@@ -183,7 +190,7 @@ const pedidos = {
             }
 
             try{
-                consulta.funciones.update(PRODUCTOS.TABLA, data);
+                consulta.funciones.update(PEDIDOS.TABLA, data);
 
             }catch(e){
                 return res.status(200).send({
@@ -193,7 +200,10 @@ const pedidos = {
             }
 
             
-
+            return res.status(200).send({
+                'message': 'Pedido actualizado con exito',
+                'pedido': data
+            }); 
 
 
         }else{

@@ -12,8 +12,8 @@ const meta = {
        
         let params = req.body;
         //Validar datos
-        params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_META_KEY;
-        params.NUM_VALOR   = (params.NUM_VALOR == undefined)?0:params.DES_META_VALUE;
+        params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_NOMBRE;
+        params.NUM_VALOR   = (params.NUM_VALOR == undefined)?0:params.NUM_VALOR;
 
         let validate_DES_NOMBRE   = !validator.isEmpty(params.DES_NOMBRE);
 
@@ -70,6 +70,17 @@ const meta = {
         
     },
 
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('impuestos', KEY, VALUE, COMPARATOR))
+
+        return data;
+    },
+
     
     update:async function(req, res){
         let params = req.body;
@@ -79,15 +90,15 @@ const meta = {
         
        
         //Validar datos
-        params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_META_KEY;
-        params.NUM_VALOR   = (params.NUM_VALOR == undefined)?0:params.DES_META_VALUE;
+        params.DES_NOMBRE   = (params.DES_NOMBRE == undefined)?'':params.DES_NOMBRE;
+        params.NUM_VALOR   = (params.NUM_VALOR == undefined)?0:params.NUM_VALOR;
         params.ESTATUS   = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
         let validate_DES_NOMBRE   = !validator.isEmpty(params.DES_NOMBRE);
 
 
 
-        if(validate_DES_NOMBRE || params.ESTATUS || params.NUM_VALOR != 0){
+        if(validate_DES_NOMBRE || params.ESTATUS || params.NUM_VALOR){
             
             //Verificamos si existe 
             let impuesto = await pool.query(consulta.get(IMPUESTOS.TABLA, id));
@@ -110,10 +121,10 @@ const meta = {
                 
                 //Guardo en la base de datos
                 const data = {
-                    DES_NOMBRE: (params.DES_NOMBRE != '')?impuesto.DES_NOMBRE:params.DES_NOMBRE,
-                    NUM_VALOR: (params.NUM_VALOR != '')?impuesto.NUM_VALOR:params.NUM_VALOR,
+                    DES_NOMBRE: (params.DES_NOMBRE == '')?impuesto.DES_NOMBRE:params.DES_NOMBRE,
+                    NUM_VALOR: (params.NUM_VALOR == '')?impuesto.NUM_VALOR:params.NUM_VALOR,
                     FECHA: date,
-                    ESTATUS: (params.ESTATUS != '')?impuesto.ESTATUS:params.ESTATUS,
+                    ESTATUS: (params.ESTATUS == '')?impuesto.ESTATUS:params.ESTATUS,
                 }
 
                 if(consulta.funciones.update(IMPUESTOS.TABLA, data)){

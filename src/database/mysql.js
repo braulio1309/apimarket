@@ -92,8 +92,10 @@ const funciones = {
       },
       function (err, rows) {
         if (err) {
-          console.log("An unexpectede error happens.");
-          return;
+          return res.status(400).send({
+            'message': 'Datos incorrectos, intentelo de nuevo'
+          });
+          
         }
         
         return res.json(rows);

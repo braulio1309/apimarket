@@ -8,6 +8,7 @@ router.post('/metatienda/registro',      md_auth.authenticated, MetatiendaContro
 router.get('/metatienda/mostrar/:page?/:limit?',        md_auth.authenticated, MetatiendaController.mostrar);
 router.put('/metatienda/actualizar/:id', md_auth.authenticated, MetatiendaController.update);
 router.delete('/metatienda/eliminar/:id',md_auth.authenticated, MetatiendaController.delete);
+router.post('/metatienda/listar/:page?/:limit?',     MetatiendaController.listar);
 
 //Meta Metatiendas
 module.exports = router;

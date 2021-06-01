@@ -25,18 +25,18 @@ const productos = {
        
 
 
-        if(params.ID_PRODUCTO && params.ID_USUARIO){
+        if(params.ID_PRODUCTO && params.ID_PEDIDO){
 
             //Valido si la tienda existe
             const producto = await pool.query(consulta.get(PRODUCTOS.TABLA, params.ID_PRODUCTO));
-            if(tienda.length == 0){
+            if(producto.length == 0){
                 return res.status(400).send({
                     'message': 'Tienda no existe'
                 });
             }
 
             const pedido = await pool.query(consulta.get(PEDIDOS.TABLA,  params.ID_PEDIDO));
-            if(tienda.length == 0){
+            if(pedido.length == 0){
                 return res.status(400).send({
                     'message': 'Pedido no existe'
                 });
@@ -50,12 +50,10 @@ const productos = {
                 ID_PEDIDO: params.ID_PEDIDO,
                 NUM_TIPO_FRECUENCIA_PAGO: parseInt(params.NUM_TIPO_FRECUENCIA_PAGO),
                 NUM_FRECUENCIA_PAGO: parseInt(params.NUM_FRECUENCIA_PAGO),
-                JSON_NOTAS: params.JSON_NOTAS,
+                JSON_NOTAS: JSON.stringify(params.JSON_NOTAS),
                 FECHA_INICIO: params.FECHA_INICIO,
                 FECHA_SIGUIENTE_PAGO: params.FECHA_SIGUIENTE_PAGO,
                 FECHA_FIN: params.FECHA_FIN,
-                ESTATUS: params.ESTATUS,
-                FECHA: date,
                 ESTATUS: 1
             }
 
@@ -69,7 +67,10 @@ const productos = {
                 }); 
             }
 
-           
+            return res.status(200).send({
+                'message': 'Producto registrado con exito',
+                'producto': data
+            }); 
 
 
 
@@ -86,6 +87,16 @@ const productos = {
         
 
          return user
+    },
+
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('suscripciones', KEY, VALUE, COMPARATOR))
+
+        return data;
     },
 
     update:async function(req, res){
@@ -106,44 +117,52 @@ const productos = {
          params.FECHA_FIN       = (params.FECHA_FIN == undefined)?null:params.FECHA_FIN;
          params.ESTATUS       = (params.ESTATUS == undefined)?'':params.ESTATUS;
 
-        if(validate_nombre || validate_slug || validate_estatus){
+        if(params.NUM_TIPO_FRECUENCIA_PAGO || params.NUM_FRECUENCIA_PAGO || params.JSON_NOTAS || params.FECHA_INICIO || params.FECHA_SIGUIENTE_PAGO
+            || params.FECHA_FIN ||  params.ESTATUS){
 
             //Valido si la tienda existe
             const producto = await pool.query(consulta.get(PRODUCTOS.TABLA, ID_PRODUCTO));
-            if(tienda.length == 0){
+            if(producto.length == 0){
                 return res.status(400).send({
                     'message': 'Tienda no existe'
                 });
             }
 
             const pedido = await pool.query(consulta.get(PEDIDOS.TABLA,  ID_PEDIDO));
-            if(tienda.length == 0){
+            if(pedido.length == 0){
                 return res.status(400).send({
                     'message': 'Pedido no existe'
                 });
             }
 
+            let produc = await pool.query(consulta.custom(`SELECT * FROM suscripciones wHERE ID_PEDIDO = ${ID_PEDIDO} AND 
+            ID_USUARIO = ${ID_USUARIO} AND ID_PRODUCTO = ${ID_PRODUCTO}`))
+            if(produc.length == 0){
+                return res.status(400).send({
+                    'message': 'Pedido no existe'
+                });
+            }
             produc = produc[0]
             //Guardar en la base de datos
             const data = {
-                ID: id,
                 ID_PRODUCTO: ID_PRODUCTO,
                 ID_USUARIO:ID_USUARIO,
                 ID_PEDIDO: ID_PEDIDO,
                 NUM_TIPO_FRECUENCIA_PAGO:(params.NUM_TIPO_FRECUENCIA_PAGO == '')?produc.NUM_TIPO_FRECUENCIA_PAGO:params.NUM_TIPO_FRECUENCIA_PAGO,
                 NUM_FRECUENCIA_PAGO:(params.NUM_FRECUENCIA_PAGO == '')?produc.NUM_FRECUENCIA_PAGO:params.NUM_FRECUENCIA_PAGO, 
-                JSON_FRECUENCIA_PAGO: (params.JSON_FRECUENCIA_PAGO == '')?produc.JSON_FRECUENCIA_PAGO:params.JSON_FRECUENCIA_PAGO,
+              //  JSON_FRECUENCIA_PAGO: (params.JSON_FRECUENCIA_PAGO == '')?produc.JSON_FRECUENCIA_PAGO:params.JSON_FRECUENCIA_PAGO,
                 FECHA_INICIO:(params.FECHA_INICIO == '')?produc.FECHA_INICIO:params.FECHA_INICIO, 
                 FECHA_FIN: (params.FECHA_FIN == '')?produc.FECHA_FIN:params.FECHA_FIN,
-                FECHA_SIGUIENTE_PAGO: (params.FECHA_SIGUIENTE_PAGO == 0)?produc.FECHA_SIGUIENTE_PAGO:parseInt(params.FECHA_SIGUIENTE_PAGO),
+                FECHA_SIGUIENTE_PAGO: (params.FECHA_SIGUIENTE_PAGO == '')?produc.FECHA_SIGUIENTE_PAGO:params.FECHA_SIGUIENTE_PAGO,
                 ESTATUS:  (params.ESTATUS == '')?produc.ESTATUS:params.ESTATUS
             }
 
             try{
+               
                 await pool.query(consulta.custom(`UPDATE suscripciones
-                SET ID_PRODUCTO=${ID_PRODUCTO}, ID_USUARIO='${ID_USUARIO}, ID_PEDIDO=${ID_PEDIDO}, 
-                NUM_TIPO_FRECUENCIA_PAGO = ${data.NUM_TIPO_FRECUENCIA_PAGO}, NUM_FRECUENCIA_PAGO = ${data.NUM_FRECUENCIA_PAGO}, JSON_FRECUENCIA_PAGO = ${data.JSON_FRECUENCIA_PAGO},
-                FECHA_INICIO = ${data.FECHA_INICIO}, FECHA_FIN = ${data.FECHA_FIN}, FECHA_SIGUIENTE_PAGO = ${data.FECHA_SIGUIENTE_PAGO}, ESTATUS= ${data.ESTATUS}
+                SET ID_PRODUCTO=${ID_PRODUCTO}, ID_USUARIO=${ID_USUARIO}, ID_PEDIDO=${ID_PEDIDO}, 
+                NUM_TIPO_FRECUENCIA_PAGO = ${data.NUM_TIPO_FRECUENCIA_PAGO}, NUM_FRECUENCIA_PAGO = ${data.NUM_FRECUENCIA_PAGO},
+                FECHA_INICIO = '${data.FECHA_INICIO}', FECHA_FIN = '${data.FECHA_FIN}', FECHA_SIGUIENTE_PAGO = '${data.FECHA_SIGUIENTE_PAGO}', ESTATUS= ${data.ESTATUS}
                 WHERE ID_USUARIO = ${ID_USUARIO} AND ID_PRODUCTO = ${ID_PRODUCTO} AND ID_PEDIDO = ${ID_PEDIDO}`));
 
             }catch(e){

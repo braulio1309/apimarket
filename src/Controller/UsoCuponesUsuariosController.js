@@ -79,6 +79,16 @@ const uso_cupones = {
          return user
     },
 
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('uso_cupones_usuarios', KEY, VALUE, COMPARATOR))
+
+        return data;
+    },
+
     update:async function(req, res){
         let params = req.body;
 

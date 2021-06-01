@@ -36,8 +36,8 @@ const meta = {
 
             //Verificamos si ya existe el metadato 
             const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METATIENDAS.TABLA} WHERE ${METATIENDAS.ID_TIENDA} = ${params.ID_TIENDA} 
-            AND ${METATIENDAS.DES_META_KEY} = '${params.DES_META_KEY}' 
-            AND ${METATIENDAS.DES_META_VALUE} = '${params.DES_META_VALUE}'`));
+            AND ${METATIENDAS.KEY} = '${params.DES_META_KEY}' 
+            AND ${METATIENDAS.VALUE} = '${params.DES_META_VALUE}'`));
             
             if(verifica.length > 0){
                 return res.status(400).send({
@@ -48,8 +48,8 @@ const meta = {
                 //Guardo en la base de datos
                 const data = {
                     ID_TIENDA: params.ID_TIENDA,
-                    DES_META_DES_META_KEY:params.DES_META_KEY,
-                    DES_META_DES_META_VALUE:params.DES_META_VALUE,
+                    DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:params.DES_META_VALUE,
                     FECHA: date,
                     ESTATUS: 1
                 }
@@ -85,6 +85,16 @@ const meta = {
         
     },
 
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('meta_tiendas', KEY, VALUE, COMPARATOR))
+
+        return data;
+    },
+
     
     update:async function(req, res){
         let params = req.body;
@@ -100,14 +110,15 @@ const meta = {
 
         let validate_DES_META_KEY    = !validator.isEmpty(params.DES_META_KEY);
         let validate_DES_META_VALUE  = !validator.isEmpty(params.DES_META_VALUE);
-        let validate_TIENDA_id  = !validator.isEmpty(params.TIENDA);
+        let validate_TIENDA_id  = !validator.isEmpty(params.ID_TIENDA);
 
-        if((validate_DES_META_KEY || validate_DES_META_VALUE|| params.ESTATUS != '') && validate_TIENDA_id){
+        if((validate_DES_META_KEY || validate_DES_META_VALUE|| params.ESTATUS != '') || validate_TIENDA_id){
            
              //Valido duplicidad
-            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METATIENDAS.TABLA} WHERE ${METATIENDAS.ID_TIENDA} = ${params.ID_TIENDA} 
-            AND (${METATIENDAS.DES_META_KEY} = '${params.DES_META_KEY}' 
-            AND ${METATIENDAS.DES_META_VALUE} = '${params.DES_META_VALUE}')`));                
+            
+            const verifica = await pool.query(consulta.custom(`SELECT * FROM ${METATIENDAS.TABLA} WHERE ${METATIENDAS.ID_TIENDA} = '${params.ID_TIENDA}' 
+            AND (${METATIENDAS.KEY} = '${params.DES_META_KEY}' 
+            AND ${METATIENDAS.VALUE} = '${params.DES_META_VALUE}')`));                
 
             if(verifica.length != 0){
                 return res.status(400).send({
@@ -130,9 +141,9 @@ const meta = {
                 let data = {
                     ID: id,
                     ID_TIENDA: meta.ID_TIENDA,
-                    DES_META_DES_META_KEY:(params.DES_META_KEY == '')?meta.DES_META_DES_META_KEY:params.DES_META_KEY,
-                    DES_META_DES_META_VALUE:(params.DES_META_VALUE == '')?meta.DES_META_DES_META_VALUE:params.DES_META_VALUE,
-                    ESTATUS: (params.estatus == '')?meta.ESTATUS:params.ESTATUS,
+                    DES_META_KEY:(params.DES_META_KEY == '')?meta.DES_META_KEY:params.DES_META_KEY,
+                    DES_META_VALUE:(params.DES_META_VALUE == '')?meta.DES_META_VALUE:params.DES_META_VALUE,
+                    ESTATUS: (params.ESTATUS == '')?meta.ESTATUS:params.ESTATUS,
                     FECHA: meta.FECHA
                 }
 

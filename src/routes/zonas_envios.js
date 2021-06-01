@@ -8,6 +8,7 @@ router.post('/zonas/registro',      md_auth.authenticated, ZonasController.crear
 router.get('/zonas/mostrar/:page?/:limit?',        md_auth.authenticated, ZonasController.mostrar);
 router.put('/zonas/actualizar/:id', md_auth.authenticated, ZonasController.update);
 router.delete('/zonas/eliminar/:id',md_auth.authenticated, ZonasController.delete);
+router.post('/zonas/listar/:page?/:limit?',     ZonasController.listar);
 
 //Meta zonass
 module.exports = router;

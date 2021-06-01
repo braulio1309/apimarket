@@ -8,6 +8,7 @@ router.post('/metaproductos/registro',      md_auth.authenticated, Metaproductos
 router.get('/metaproductos/mostrar/:page?/:limit?',        md_auth.authenticated, MetaproductosController.mostrar);
 router.put('/metaproductos/actualizar/:id', md_auth.authenticated, MetaproductosController.update);
 router.delete('/metaproductos/eliminar/:id',md_auth.authenticated, MetaproductosController.delete);
+router.post('/metaproductos/listar/:page?/:limit?',     MetaproductosController.listar);
 
 //Meta metaproductoss
 module.exports = router;

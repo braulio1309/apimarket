@@ -81,17 +81,19 @@ app.use('/api', Usuarios_roles_routes);
 app.use('/api', tiendas_routes);
 app.use('/api', productos_routes);
 app.use('/api', categorias_productos_routes);
-
-//Sin probar
-app.use('/api', pedidos_routes);
 app.use('/api', impuestos_routes);
 app.use('/api', metaProductos_routes);
 app.use('/api', metaTiendas_routes);
+app.use('/api', pedidos_routes);
 app.use('/api', metaPedidos_routes);
 app.use('/api', zonas_routes);
 app.use('/api', pedidos_productos_routes);
-app.use('/api', meta_pedidos_productos_routes);
 app.use('/api', suscripciones_routes);
+
+//Sin probar
+
+app.use('/api', meta_pedidos_productos_routes);
+
 app.use('/api', reglas_descuento_routes);
 app.use('/api', cupones_routes);
 app.use('/api', fidelizacion_clientes_routes);

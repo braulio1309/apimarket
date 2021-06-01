@@ -8,6 +8,8 @@ router.post('/usuariosroles/registro',      md_auth.authenticated, Usuarios_role
 router.get('/usuariosroles/mostrar/:page?/:limit?',        md_auth.authenticated, Usuarios_rolesController.mostrar);
 router.put('/usuariosroles/actualizar/:id_usuario/:id_rol', md_auth.authenticated, Usuarios_rolesController.update);
 router.delete('/usuariosroles/eliminar/:id_usuario/:id_rol',md_auth.authenticated, Usuarios_rolesController.delete);
+router.post('/usuariosroles/listar/:page?/:limit?',     Usuarios_rolesController.listar);
+
 
 //Meta Usuario_roless
 module.exports = router;

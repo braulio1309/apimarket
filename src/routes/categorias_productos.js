@@ -8,6 +8,7 @@ router.post('/categoriasproductos/registro',      md_auth.authenticated, Categor
 router.get('/categoriasproductos/mostrar/:page?/:limit?',        md_auth.authenticated, CategoriasProductosController.mostrar);
 router.put('/categoriasproductos/actualizar/:id', md_auth.authenticated, CategoriasProductosController.update);
 router.delete('/categoriasproductos/eliminar/:id',md_auth.authenticated, CategoriasProductosController.delete);
+router.post('/categoriasproductos/listar/:page?/:limit?',     CategoriasProductosController.listar);
 
 //Meta categoriasproductoss
 module.exports = router;

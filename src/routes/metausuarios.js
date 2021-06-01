@@ -8,6 +8,7 @@ router.post('/metausuarios/registro',      md_auth.authenticated, MetaUsuariosCo
 router.get('/metausuarios/mostrar/:page?/:limit?',        md_auth.authenticated, MetaUsuariosController.mostrar);
 router.put('/metausuarios/actualizar/:id', md_auth.authenticated, MetaUsuariosController.update);
 router.delete('/metausuarios/eliminar/:id',md_auth.authenticated, MetaUsuariosController.delete);
+router.post('/metausuarios/listar/:page?/:limit?',     MetaUsuariosController.listar);
 
 //Meta MetaUsuarioss
 module.exports = router;

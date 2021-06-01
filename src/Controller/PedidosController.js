@@ -23,9 +23,9 @@ const pedidos = {
         const data = {
             ID_USUARIO: id,
             NUM_TOTAL: params.NUM_TOTAL,
-            JSON_DIRECCION_FACTURA: params.JSON_DIRECCION_FACTURA,
-            JSON_DIRECCION_ENVIO:params.JSON_DIRECCION_ENVIO,
-            JSON_NOTAS_FACTURA: params.JSON_NOTAS_FACTURA,
+            JSON_DIRECCION_FACTURA: JSON.stringify(params.JSON_DIRECCION_FACTURA),
+            JSON_DIRECCION_ENVIO:JSON.stringify(params.JSON_DIRECCION_ENVIO),
+            JSON_NOTAS_PEDIDO: JSON.stringify(params.JSON_NOTAS_PEDIDO),
             FECHA: date,
             ESTATUS: 1
         }
@@ -52,7 +52,18 @@ const pedidos = {
          return user
     },
 
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('pedidos', KEY, VALUE, COMPARATOR))
+
+        return data;
+    },
+
     update:async function(req, res){
+        let params = req.body
         const id = req.params.id;
 
         
@@ -80,15 +91,15 @@ const pedidos = {
                 ID: id,
                 ID_USUARIO: (params.ID_USUARIO == null)?pedi.ID_USUARIO:params.ID_USUARIO,
                 NUM_TOTAL: (params.NUM_TOTAL == null)?pedi.NUM_TOTAL:params.NUM_TOTAL,
-                JSON_DIRECCION_ENVIO: (params.JSON_DIRECCION_ENVIO == null)?pedi.JSON_DIRECCION_ENVIO:params.JSON_DIRECCION_ENVIO,
-                JSON_DIRECCION_FACTURA: (params.JSON_DIRECCION_FACTURA == null)?pedi.JSON_DIRECCION_FACTURA:params.JSON_DIRECCION_FACTURA,
-                JSON_NOTAS_FACTURA: (params.JSON_NOTAS_PEDIDO == null)?pedi.JSON_NOTAS_PEDIDO:params.JSON_NOTAS_PEDIDO,
+                JSON_DIRECCION_ENVIO: (params.JSON_DIRECCION_ENVIO == null)?pedi.JSON_DIRECCION_ENVIO:JSON.stringify(params.JSON_DIRECCION_ENVIO),
+                JSON_DIRECCION_FACTURA: (params.JSON_DIRECCION_FACTURA == null)?pedi.JSON_DIRECCION_FACTURA:JSON.stringify(params.JSON_DIRECCION_FACTURA),
+                JSON_NOTAS_PEDIDO: (params.JSON_NOTAS_PEDIDO == null)?pedi.JSON_NOTAS_PEDIDO:JSON.stringify(params.JSON_NOTAS_PEDIDO),
                 FECHA: pedi.FECHA,
                 ESTATUS:  (params.ESTATUS == null)?pedi.ESTATUS:params.ESTATUS
             }
 
             try{
-                consulta.funciones.insertTable(PEDIDOS.TABLA, data);
+                consulta.funciones.update(PEDIDOS.TABLA, data);
     
             }catch(e){
                 return res.status(400).send({

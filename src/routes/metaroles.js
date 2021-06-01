@@ -8,6 +8,7 @@ router.post('/metaroles/registro',      md_auth.authenticated, MetaRolesControll
 router.get('/metaroles/mostrar/:page?/:limit?',        md_auth.authenticated, MetaRolesController.mostrar);
 router.put('/metaroles/actualizar/:id', md_auth.authenticated, MetaRolesController.update);
 router.delete('/metaroles/eliminar/:id',md_auth.authenticated, MetaRolesController.delete);
+router.post('/metaroles/listar/:page?/:limit?',     MetaRolesController.listar);
 
 //Meta metaroless
 module.exports = router;

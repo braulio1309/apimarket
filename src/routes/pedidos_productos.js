@@ -8,6 +8,7 @@ router.post('/pedidosproductos/registro/:idtienda/:idpedido',      md_auth.authe
 router.get('/pedidosproductos/mostrar/:page?/:limit?',        md_auth.authenticated, PedidosproductosController.mostrar);
 router.put('/pedidosproductos/actualizar/:id', md_auth.authenticated, PedidosproductosController.update);
 router.delete('/pedidosproductos/eliminar/:id',md_auth.authenticated, PedidosproductosController.delete);
+router.post('/pedidosproductos/listar/:page?/:limit?',     PedidosproductosController.listar);
 
 //Meta Pedidosproductoss
 module.exports = router;

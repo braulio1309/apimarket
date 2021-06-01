@@ -14,10 +14,10 @@ const zonas = {
         const id = req.params.id;
         
         //Validar datos
-        params.DES_NOMBRE              = (params.DES_NOMBRE == undefined)? '':params.NUM_TOTAL;
-        params.REGION_ZONA = (params.REGION_ZONA == undefined)?null:params.JSON_DIRECCION_FACTURA;
-        params.JSON_METODOS_ENVIO   = (params.JSON_METODOS_ENVIO == undefined)?null:params.JSON_DIRECCION_ENVIO;
-        params.REGION_ZONA      = (params.REGION_ZONA == undefined)?null:params.JSON_NOTAS_PEDIDO;
+        params.DES_NOMBRE              = (params.DES_NOMBRE == undefined)? '':params.DES_NOMBRE;
+        params.REGION_ZONA = (params.REGION_ZONA == undefined)?null:params.REGION_ZONA;
+        params.JSON_METODOS_ENVIO   = (params.JSON_METODOS_ENVIO == undefined)?null:params.JSON_METODOS_ENVIO;
+    
         
         let validate_DES_NOMBRE   = !validator.isEmpty(params.DES_NOMBRE);
 
@@ -36,7 +36,7 @@ const zonas = {
              const data = {
                 DES_NOMBRE: params.DES_NOMBRE,
                 REGION_ZONA: params.REGION_ZONA,
-                JSON_METODOS_ENVIO:params.JSON_METODOS_ENVIO,
+                JSON_METODOS_ENVIO:JSON.stringify(params.JSON_METODOS_ENVIO),
                 ID_USUARIO_ALTA: req.user.sub,
                 ESTATUS:1, 
                 FECHA: date
@@ -71,14 +71,26 @@ const zonas = {
         return user
     },
 
+    listar:async function(req, res){
+
+        const KEY = req.body.KEY;
+        const VALUE = req.body.VALUE;
+        const COMPARATOR = req.body.COMPARATOR;
+        const data = consulta.funciones.paginated_query(req, res, consulta.search('zonas_envios', KEY, VALUE, COMPARATOR))
+
+        return data;
+    },
+
     update:async function(req, res){
+
+        let params = req.body;
         const id = req.params.id;
 
                 
         //Validar datos
-        params.DES_NOMBRE              = (params.DES_NOMBRE == undefined)? '':params.NUM_TOTAL;
-        params.REGION_ZONA = (params.REGION_ZONA == undefined)?null:params.JSON_DIRECCION_FACTURA;
-        params.JSON_METODOS_ENVIO   = (params.JSON_METODOS_ENVIO == undefined)?null:params.JSON_DIRECCION_ENVIO;
+        params.DES_NOMBRE              = (params.DES_NOMBRE == undefined)? '':params.DES_NOMBRE;
+        params.REGION_ZONA = (params.REGION_ZONA == undefined)?null:params.REGION_ZONA;
+        params.JSON_METODOS_ENVIO   = (params.JSON_METODOS_ENVIO == undefined)?null:params.JSON_METODOS_ENVIO;
         params.ESTATUS      = (params.ESTATUS == undefined)?null:params.ESTATUS;
 
         let validate_DES_NOMBRE   = !validator.isEmpty(params.DES_NOMBRE);
@@ -108,9 +120,9 @@ const zonas = {
                  ID: id,
                 DES_NOMBRE: (params.DES_NOMBRE != null)?zona.DES_NOMBRE:params.DES_NOMBRE,
                 REGION_ZONA: (params.REGION_ZONA != null)?zona.REGION_ZONA:params.REGION_ZONA,
-                JSON_METODOS_ENVIO:(params.JSON_METODOS_ENVIO != null)?zona.JSON_METODOS_ENVIO:params.JSON_METODOS_ENVIO,
+                JSON_METODOS_ENVIO:(params.JSON_METODOS_ENVIO != null)?zona.JSON_METODOS_ENVIO:JSON.stringify(params.JSON_METODOS_ENVIO),
                 ID_USUARIO_ALTA: req.user.sub,
-                ESTATUS:(params.ESTATUS != null)?zona.ESTATUS:params.ESTATUS, 
+                ESTATUS:(params.ESTATUS == null)?zona.ESTATUS:params.ESTATUS, 
                 FECHA: zona.FECHA
             }
     
